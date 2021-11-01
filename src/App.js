@@ -3,6 +3,7 @@ import './App.css';
 import { Layout, Menu, Breadcrumb ,Button} from 'antd';
 import { Statistic, Card, Row, Col } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import Listli  from './components/Listli';
 const { Header, Content, Footer } = Layout;
 
 
@@ -39,7 +40,7 @@ function App() {
       </Breadcrumb>
       <div className="site-layout-content">
       <div className="front-img">
-            <img src='首页大图.png' className='imgOfFront'></img>
+            <img src='首页大图.png' alt='nothing' className='imgOfFront'></img>
         </div>
       
         <br/>
@@ -97,6 +98,9 @@ function App() {
               </Col>
             </Row>
           </div>
+          <div className='list-group'>
+            <Listli/>
+            </div>
         </div>
       </div>
     </Content>

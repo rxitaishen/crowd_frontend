@@ -1,0 +1,48 @@
+.preview-div{
+    display: flex;
+    width: 90%;
+    max-height: 300px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border: 1px solid #DDDDDD
+}
+
+.preview-img ,.preview-content{
+    width: 50%;
+    height: 100%;
+}
+
+.preview-img img{
+    width:96%;
+    height:300px;
+}
+
+.content-describe {
+    width:90%;
+    min-height: 42px;
+    display: -webkit-box;  /*  display: -webkit-box; 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示  */
+    -webkit-box-orient: vertical; /*  -webkit-box-orient 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式  */
+    -webkit-line-clamp: 2; /*  -webkit-line-clamp用来限制在一个块元素显示的文本的行数 */
+    overflow: hidden;
+}
+
+.target-num .ant-card-body {
+    padding: 6px;
+}
+
+.content-title{
+    padding-top: 30px;
+}
+
+.content-status{
+    display: flex;
+    margin-top: 30px;
+    font-size: 16px;
+    width: 80%;
+    color: #777777;
+    justify-content: space-between
+}
+
+.content-status div span{
+    margin-right: 5px;
+}
