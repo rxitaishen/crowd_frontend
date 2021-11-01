@@ -1,38 +1,57 @@
-.App {
-  text-align: center;
+
+.site-layout-content {
+  min-height: 280px;
+  padding: 24px;
+  background: #fff;
+}
+#components-layout-demo-top .logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+.logo {
+  float: left;
+  margin-top: -12px;
+  height: 85px;
+}
+.raise{
+  float:left;
+}
+.front-img{
+  display:flex;
+}
+.imgOfFront{
+  width: 100%;
+}
+.ant-layout-header{
+  margin-top: 0.5rem;
+  /* margin-bottom: 10px; */
+  padding:0px 12%;
+  background: #fff;
+  
+}
+.ant-menu-overflow-item{
+  transition: all .5s;
+  overflow: hidden; /* 让溢出的内容隐藏起来。意思是让下方的橙色方形先躲起来 */
+}
+.ant-menu-overflow-item:hover{
+  /* box-shadow: 0 0 15px #AAA; */
+  top: -5px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.topText{
+  margin-top:0.5rem;
+  display:flex;
+  flex-direction: row-reverse
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.topText-child{
+  padding-right: 20px;
+  border-right: 1px solid #252947; /*每个li之间有间隔线*/
+  margin-right: 20px;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.topText-child:hover{
+  cursor: pointer;
+  color: rgb(11, 105, 194)
 }
