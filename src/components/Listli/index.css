@@ -7,14 +7,25 @@
     border: 1px solid #DDDDDD
 }
 
+.preview-div:hover{
+    transition-property:all;
+    transition-duration: 0.2s;
+    transition-timing-function: linear;
+}
+.preview-div:hover{
+    -webkit-box-shadow: #ccc 0px 10px 10px;
+    -moz-box-shadow: #ccc 0px 10px 10px;
+    box-shadow: #ccc 0px 10px 10px;
+}
+
 .preview-img ,.preview-content{
     width: 50%;
     height: 100%;
 }
 
 .preview-img img{
-    width:96%;
-    height:300px;
+    width:95%;
+    height:298px;
 }
 
 .content-describe {
