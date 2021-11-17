@@ -1,5 +1,6 @@
 
 import './App.css';
+import { Router, Route, browserHistory,Link} from 'react-router-dom'
 import { Layout, Menu, Breadcrumb, Button } from 'antd';
 import { Statistic, Card, Row, Col } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
@@ -32,8 +33,8 @@ function App() {
 
         </Menu>
         <div className='loginOrRegister'>
-          <div className='login' >登录</div>\
-          <div className='register'>注册</div>
+          <div className='login' ><Link to="/login" >登录</Link></div> \
+          <div className='register'><Link to="/register" >注册</Link></div>
         </div>
         </div>
       </Header>

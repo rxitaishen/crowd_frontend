@@ -3,6 +3,8 @@ import 'antd/dist/antd.css';
 import './index.css';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Router, Route, browserHistory,Link} from 'react-router-dom'
+
 
 const NormalLoginForm = () => {
   const onFinish = (values) => {
@@ -49,9 +51,10 @@ const NormalLoginForm = () => {
 
         <Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">
-            注册
+          <Link to="/" >
+            注册</Link>
           </Button>
-          已有账号？ <a href="">去登录</a>
+          已有账号？ <Link to="/login">去登录</Link>
         </Form.Item>
       </Form>
     </div>

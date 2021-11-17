@@ -1,6 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
+import { Router, Route, browserHistory,Link} from 'react-router-dom'
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
@@ -57,10 +58,10 @@ const NormalLoginForm = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-form-button">
-            登录
+          <Button type="primary" htmlType="submit" className="login-form-button"><Link to="/" >
+            登录</Link>
           </Button>
-          还没有账号？ <a href="">去注册</a>
+          还没有账号？ <Link to="/register">去注册</Link>
         </Form.Item>
       </Form>
     </div>
