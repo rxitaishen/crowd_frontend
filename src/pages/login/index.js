@@ -1,28 +1,51 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
-import { Router, Route, browserHistory,Link} from 'react-router-dom'
+import { Router, useHistory , Link } from 'react-router-dom'
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import {login,logout} from '../../redux/login_action'
+import store from '../../redux/store'
+import axios from'axios'
 
 const NormalLoginForm = () => {
+  var arr = [{name:'123',pass:'123'}];
+  const history = useHistory()
   const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+    console.log('Received valuess of form: ', values);
+    axios.post(`/api/login`,values).then(
+      res=>{
+          console.log('res=>',res.data); 
+          if(res.data=="登录成功"){
+            store.dispatch(login())
+            console.log('登陆成功',store.getState());
+            history.push('/')
+          }
+          else if(res.data=="登录失败"){
+              alert("登录失败，请注册")
+          }
+      }
+  )    
   };
 
+
+
+  useEffect(() => {
+    store.dispatch(logout())
+  })
   return (
     <div className='container'>
       <h1>请登录</h1>
       <Form
         name="normal_login"
         className="login-form"
-        initialValues={{
+        initialvaluess={{
           remember: true,
         }}
         onFinish={onFinish}
       >
         <Form.Item
-          name="username"
+          name="userName"
           rules={[
             {
               required: true,
@@ -33,7 +56,7 @@ const NormalLoginForm = () => {
           <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
         </Form.Item>
         <Form.Item
-          name="password"
+          name="passWord"
           rules={[
             {
               required: true,
@@ -48,7 +71,7 @@ const NormalLoginForm = () => {
           />
         </Form.Item>
         <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
+          <Form.Item name="remember" valuesPropName="checked" noStyle>
             <Checkbox>记住我</Checkbox>
           </Form.Item>
 
@@ -58,8 +81,7 @@ const NormalLoginForm = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-form-button"><Link to="/" >
-            登录</Link>
+          <Button type="primary" htmlType="submit" className="login-form-button" >登录
           </Button>
           还没有账号？ <Link to="/register">去注册</Link>
         </Form.Item>

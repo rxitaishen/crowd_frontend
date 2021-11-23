@@ -1,14 +1,34 @@
 
 import './App.css';
-import { Router, Route, browserHistory,Link} from 'react-router-dom'
+import { Router, Route, browserHistory, Link } from 'react-router-dom'
 import { Layout, Menu, Breadcrumb, Button } from 'antd';
 import { Statistic, Card, Row, Col } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import Listli from './components/Listli';
+import store from './redux/store'
 const { Header, Content, Footer } = Layout;
 
 
 function App() {
+  const cheackLogin = () => {
+    let loginStatus = store.getState()
+    if (loginStatus == 1) {
+      return (
+        <div className='loginOrRegister'>
+          {/* <div className='login' ><Link to="/login" >登录</Link></div> \
+          <div className='register'><Link to="/register" >注册</Link></div> */}
+          已登录。
+        </div>
+      )
+    } else {
+      return (
+        <div className='loginOrRegister'>
+          <div className='login' ><Link to="/login" >登录</Link></div> \
+          <div className='register'><Link to="/register" >注册</Link></div>
+        </div>
+      )
+    }
+  }
   return (
     <Layout className="layout">
       <div className='topText'>
@@ -19,23 +39,24 @@ function App() {
       </div>
       <Header>
         <div className='header'>
-        <div className="logo" ><img src='众筹.png' style={{ height: '83px' }} alt="es-lint want to get" /></div>
-        <Menu mode="horizontal" defaultSelectedKeys={['0']}>
+          <div className="logo" ><img src='众筹.png' style={{ height: '83px' }} alt="es-lint want to get" /></div>
+          <Menu mode="horizontal" defaultSelectedKeys={['0']}>
 
-          {/* {new Array(5).fill(null).map((_, index) => {
+            {/* {new Array(5).fill(null).map((_, index) => {
           const key = index + 1;
           return <Menu.Item key={key}>{`nav ${key}`}</Menu.Item>
         })} */}
-          <Menu.Item key={0}>首页</Menu.Item>
-          <Menu.Item key={1}>产品众筹</Menu.Item>
-          <Menu.Item key={2}>历史项目</Menu.Item>
-          <Menu.Item key={3}><Button >发起众筹</Button></Menu.Item>
+            <Menu.Item key={0}>首页</Menu.Item>
+            <Menu.Item key={1}>产品众筹</Menu.Item>
+            <Menu.Item key={2}>历史项目</Menu.Item>
+            <Menu.Item key={3}><Button >发起众筹</Button></Menu.Item>
 
-        </Menu>
-        <div className='loginOrRegister'>
-          <div className='login' ><Link to="/login" >登录</Link></div> \
-          <div className='register'><Link to="/register" >注册</Link></div>
-        </div>
+          </Menu>
+         {cheackLogin()}
+          {/* <div className='loginOrRegister'>
+            <div className='login' ><Link to="/login" >登录</Link></div> \
+            <div className='register'><Link to="/register" >注册</Link></div>
+          </div> */}
         </div>
       </Header>
       <Content style={{ padding: '0 50px' }}>
