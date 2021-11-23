@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 
 users = require('./models/users');
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
@@ -47,4 +47,4 @@ app.post(`/api/login`,(req, res)=>{
     });
 })
 app.listen(5000)
-console.log('Running on port 3000...');
+console.log('Running on port 5000...');
