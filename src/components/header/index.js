@@ -24,7 +24,7 @@ function HeaderMenu() {
         </a>
       </Menu.Item>
       <Menu.Item key="1">
-        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+        <a onClick={() => { history.push("/mycrowd") }}>
           我的众筹
         </a>
       </Menu.Item>

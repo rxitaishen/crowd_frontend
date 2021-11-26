@@ -1,19 +1,32 @@
-import {useEffect,useState} from 'react'
+import { useEffect, useState } from 'react'
 import './App.css';
 import HeaderMenu from './components/header';
 import { Link } from 'react-router-dom'
 import { Statistic, Card, Row, Col, Avatar, Layout, Menu, Breadcrumb, Button, Dropdown, Image } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined, UserOutlined, DownOutlined } from '@ant-design/icons';
 import Listli from './components/Listli';
+import axios from 'axios'
 const { Header, Content, Footer } = Layout;
-
 
 function App() {
 
-  const [proList,setProList] = useState([])
+  const [proList, setProList] = useState([])
 
+  useEffect(() => {
+    axios.get(`/api/projects/search/all`).then(
+      res => {
+        if (res.data.length != 0) {
+          // console.log('查询所有项目得到结果', res);
+          setProList(res.data)
+        }
+        else {
+          console.log('没有项目');
+        }
+      }
+    )
+  }, [])
 
-
+  
   return (
     <Layout className="layout">
       <HeaderMenu />
@@ -23,7 +36,7 @@ function App() {
           <Breadcrumb.Item>List</Breadcrumb.Item>
           <Breadcrumb.Item>App</Breadcrumb.Item>
         </Breadcrumb> */}
-        <br/>
+        <br />
         <div className="site-layout-content">
           <div className="front-img">
             <img src='./首页大图.png' alt='nothing' className='imgOfFront'></img>
@@ -85,18 +98,20 @@ function App() {
               </Row>
             </div>
             <div className='list-group'>
-              {/* {proList
+              {proList
                 ? proList.map((item) => (
                   <Listli
-                    key={item.articleId}
-                    item={item}
-                    title="钱塘大讲坛"
-                    breadCrumb={['社科普及', '钱塘大讲坛']}
-                    list={proList}
+                    proName_father={item.name}
+                    proDescription_father={item.description}
+                    proViewNum_father={item.viewNum}
+                    proSuportNum_father={item.suportNum}
+                    proTimeStart_father={item.timeStart}
+                    proTimeEnd_father={item.timeEnd}
+                    proMoneyTarget_father={item.moneyTarget}
+                    proMoneyHave_father={item.moneyHave}
                   ></Listli>
                 ))
-                : ''} */}
-                <Listli />
+                : ''}
             </div>
           </div>
         </div>

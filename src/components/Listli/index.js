@@ -5,9 +5,17 @@ import axios from 'axios'
 import './index.css'
 const { Meta } = Card;
 const listli = (props) => {
-    const productImg_children = props.productImg_father;
-    const productName_children = props.productName_father;
-    const productDescription_children = props.productDescription_father;
+    // const productImg_children = props.proImg_father;
+    const proName_children = props.proName_father;
+    const proDescription_children = props.proDescription_father;
+    const proViewNum_children = props.proViewNum_father;
+    const proSuportNum_children = props.proSuportNum_father;
+    const proTimeStart_children = props.proTimeStart_father;
+    const proTimeEnd_children = props.proTimeEnd_father;
+    const proMoneyTarget_children = props.proMoneyTarget_father;
+    const proMoneyHave_children = props.proMoneyHave_father;
+
+    
     return (
         // <Card
         //     hoverable
@@ -34,18 +42,15 @@ const listli = (props) => {
             </div>
             <div className='preview-content'>
                 <div className='content-title'>
-                    <h1>标题标题标题</h1>
+                    <h1>{proName_children}</h1>
                 </div>
                 <div className='content-describe' title='喵喵喵'>
-                    描述描述描述描述述描述描述描述描述描述描述描描述描述描述描述描述
-                    描述描述描述描述述描述描述描述描述描述描述描描述描述描述描述描述
-                    描述描述描述描述述描述描述描述描述描述描述描描述描述描述描述描述
-                    描述描述描述描述述描述描述描述描述描述描述描描述描述描述描述描述
+                    {proDescription_children}
                 </div>
                 <div className='content-status'>
-                <div className='support-num'> <LikeOutlined />支持人数:18</div>
-                <div className='view-num'><EyeOutlined />浏览:137</div>
-                <div className='last-time'><FieldTimeOutlined />2020-06-17 至 2021-01-31</div>
+                <div className='support-num'> <LikeOutlined />支持人数:{proSuportNum_children}</div>
+                <div className='view-num'><EyeOutlined />浏览:{proViewNum_children}</div>
+                <div className='last-time'><FieldTimeOutlined />{proTimeStart_children} 至 {proTimeEnd_children}</div>
                 </div>
                 <Divider />
                 <div className='target-num'>
@@ -55,7 +60,7 @@ const listli = (props) => {
                                 <Statistic
                                     style={{}}
                                     title="目标金额"
-                                    value={489}
+                                    value={proMoneyTarget_children}
                                     precision={2}
                                     valueStyle={{ color: '#3f8600' ,fontSize:'14px'}}
                                     prefix={<MoneyCollectOutlined />}
@@ -68,7 +73,7 @@ const listli = (props) => {
                                 <Statistic
                                     style={{}}
                                     title="已支持金额"
-                                    value={489}
+                                    value={proMoneyHave_children}
                                     precision={2}
                                     valueStyle={{ color: '#3f8600' ,fontSize:'14px'}}
                                     prefix={<MoneyCollectOutlined />}
@@ -81,7 +86,7 @@ const listli = (props) => {
                                 <Statistic
                                     style={{}}
                                     title="剩余时间"
-                                    value={489}
+                                    value={213}
                                     precision={2}
                                     valueStyle={{ color: '#3f8600' ,fontSize:'14px'}}
                                     prefix={<FieldTimeOutlined />}

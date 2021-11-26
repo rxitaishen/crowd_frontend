@@ -56,9 +56,10 @@
   color: rgb(11, 105, 194)
 }
 .list-group{
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
+  margin: 15px auto;
 }
 .loginOrRegister{
   float: right;

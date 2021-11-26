@@ -84,6 +84,8 @@ const NormalLoginForm = () => {
           <Button type="primary" htmlType="submit" className="login-form-button" >登录
           </Button>
           还没有账号？ <Link to="/register">去注册</Link>
+          
+          <Link to="/"><span style={{display:'block'}}>暂不注册?</span></Link>
         </Form.Item>
       </Form>
     </div>

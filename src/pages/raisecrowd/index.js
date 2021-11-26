@@ -1,12 +1,13 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import HeaderMenu from '../../components/header';
-import { Link } from 'react-router-dom'
+import { Link,useHistory } from 'react-router-dom'
 import { Form, Button, Layout, Upload, message, Input, Checkbox, Select, Row, Col,DatePicker,
     Space } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import store from '../../redux/store'
 import './index.css'
 import BraftEditor from 'braft-editor';
+import axios from 'axios';
 import 'braft-editor/dist/index.css';
 
 import { login, logout } from '../../redux/login_action'
@@ -23,6 +24,18 @@ function RaiseCrowd() {
     const [verifyCode, setverifyCode] = useState(''); //设置验证码，不设置state的话会导致验证码不改变，为初始值？
     const [proList, setProList] = useState([])
     var tempObj = new FormData(); //用于上传文件的formdata数据格式
+    var history = useHistory()
+
+    //检测是否已登录，如果没登录就爆出消息去登录
+    useEffect(()=>{
+        if(store.getState() !== 1){
+            console.log('未登录')
+            alert('未登录，请先登录')
+            history.push('/login')
+        }
+    })
+   
+
     //重置表单
     const reset = () => {
         form.resetFields();
@@ -34,7 +47,6 @@ function RaiseCrowd() {
         date1_hou = { startTime: dateString[0], endTime: dateString[1] };
     };
 
-
     //提交按钮
     const handleSubmit = () => {
         form.validateFields().then(
@@ -42,47 +54,32 @@ function RaiseCrowd() {
                 //输出表单对象
                 console.log('verifyCode', verifyCode);
                 console.log('表单对象', fieldsValue);
-                console.log(fieldsValue.code); //用户所填的验证码值
-                // var co = fieldsValue.code;
-                // var coobj = { inputStr: co };
-                // console.log('coobj', coobj);
-                // demo1Api.Verify(coobj).then((res) => {
-                //   console.log('验证码回应信息是', res.data);
-                //   if (res.data.body) {
-                //     console.log('验证码正确');
-                //   } else {
-                //     console.log('校验码错误');
-                //   }
-                // });
-                // console.log('验证码正确');
 
                 //将表单数据写入formdata对象中
                 for (var key in fieldsValue) {
-                    var value = eval(`fieldsValue.${key}`); //eval函数执行字符串代码
-                    tempObj.append(key, value);
+                    if(key != 'indexImage' || key != 'time'){
+                        var value = eval(`fieldsValue.${key}`); //eval函数执行字符串代码
+                        tempObj.append(key, value);
+                    }
+                    else{
+                        continue
+                    }
                 }
                 //加入文件流
                 tempObj.append('file', file);
+                tempObj.append('timeStart', date1_hou.startTime);
+                tempObj.append('timeEnd', date1_hou.endTime);
 
-                //后端需要这个参数，就随便设值了
-                tempObj.append('EssaysCollectionId', 14);
-
-                //后端需要这个参数，是自己的ip地址，用于区分是哪个用户上交了
-                tempObj.append('ip', str[0]);
-
-                console.log('tempObj', tempObj.get('code')); //formdata对象一定要写get才能consolog
-
-                //连带文件流一起发送请求,将formdata发送出去
-                //注意！！虽然完成了formdata数据重构,但之前犯傻传回去的还是表单的fieldsValue，
-                //导致了请求头出错（因为表单数据fieldsValue里没有文件流，就会报错），折腾了一天
-
-                // demo1Api.infoUpload(tempObj).then((res) => {
-                //     console.log('提交后的res', res);
-                //     //根据res的返回值来提示用户
-                // });
+                axios.post(`/api/projects/addproject`,tempObj).then( res =>{
+                    console.log('res=>',res.data); 
+                    if(res.data=="添加成功"){
+                        alert("添加成功")
+                    }
+                    else if(res.data=="添加失败"){
+                        alert("添加失败")
+                    }
+                })
                 //重置表单
-
-                //getVerify();
                 reset();
             }
             // console.log(fileList);
@@ -188,10 +185,9 @@ function RaiseCrowd() {
                                         >
                                             <Input placeholder="请输入" style={{ width: '212px' }} maxLength="10" />
                                         </Form.Item>
-                                       
                                         <Form.Item
                                             label="招标时间段"
-                                            name="title"
+                                            name="time"
                                             rules={[
                                                 {
                                                     required: true,
@@ -199,9 +195,9 @@ function RaiseCrowd() {
                                                 }
                                             ]}
                                         >
-                                            <Space direction="vertical">
+                                            {/* <Space direction="vertical"> */}
                                                 <RangePicker style={{width:'300px'}} onChange={handleChange} />
-                                            </Space>
+                                            {/* </Space> */}
                                         </Form.Item>
                                         <Form.Item
                                             label="项目描述"
