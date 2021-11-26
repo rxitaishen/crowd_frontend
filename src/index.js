@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Router from './router';
+import store from './redux/store'
 
 ReactDOM.render(
   // <React.StrictMode>
@@ -12,6 +13,13 @@ ReactDOM.render(
   <Router/>,
   document.getElementById('root')
 );
+
+store.subscribe(()=>{
+  ReactDOM.render(
+    <Router/>,
+    document.getElementById('root')
+  );
+})
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

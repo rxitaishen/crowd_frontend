@@ -1,73 +1,32 @@
-
+import {useEffect,useState} from 'react'
 import './App.css';
-import { Router, Route, browserHistory, Link } from 'react-router-dom'
-import { Layout, Menu, Breadcrumb, Button } from 'antd';
-import { Statistic, Card, Row, Col } from 'antd';
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import HeaderMenu from './components/header';
+import { Link } from 'react-router-dom'
+import { Statistic, Card, Row, Col, Avatar, Layout, Menu, Breadcrumb, Button, Dropdown, Image } from 'antd';
+import { ArrowUpOutlined, ArrowDownOutlined, UserOutlined, DownOutlined } from '@ant-design/icons';
 import Listli from './components/Listli';
-import store from './redux/store'
 const { Header, Content, Footer } = Layout;
 
 
 function App() {
-  const cheackLogin = () => {
-    let loginStatus = store.getState()
-    if (loginStatus == 1) {
-      return (
-        <div className='loginOrRegister'>
-          {/* <div className='login' ><Link to="/login" >登录</Link></div> \
-          <div className='register'><Link to="/register" >注册</Link></div> */}
-          已登录。
-        </div>
-      )
-    } else {
-      return (
-        <div className='loginOrRegister'>
-          <div className='login' ><Link to="/login" >登录</Link></div> \
-          <div className='register'><Link to="/register" >注册</Link></div>
-        </div>
-      )
-    }
-  }
+
+  const [proList,setProList] = useState([])
+
+
+
   return (
     <Layout className="layout">
-      <div className='topText'>
-
-        <div className='topText-child'>联系我们</div>
-        <div className='topText-child'>关于我们</div>
-        <div className='topText-child'>客服热线</div>
-      </div>
-      <Header>
-        <div className='header'>
-          <div className="logo" ><img src='众筹.png' style={{ height: '83px' }} alt="es-lint want to get" /></div>
-          <Menu mode="horizontal" defaultSelectedKeys={['0']}>
-
-            {/* {new Array(5).fill(null).map((_, index) => {
-          const key = index + 1;
-          return <Menu.Item key={key}>{`nav ${key}`}</Menu.Item>
-        })} */}
-            <Menu.Item key={0}>首页</Menu.Item>
-            <Menu.Item key={1}>产品众筹</Menu.Item>
-            <Menu.Item key={2}>历史项目</Menu.Item>
-            <Menu.Item key={3}><Button >发起众筹</Button></Menu.Item>
-
-          </Menu>
-         {cheackLogin()}
-          {/* <div className='loginOrRegister'>
-            <div className='login' ><Link to="/login" >登录</Link></div> \
-            <div className='register'><Link to="/register" >注册</Link></div>
-          </div> */}
-        </div>
-      </Header>
+      <HeaderMenu />
       <Content style={{ padding: '0 50px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
+        {/* <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>Home</Breadcrumb.Item>
           <Breadcrumb.Item>List</Breadcrumb.Item>
           <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb>
+        </Breadcrumb> */}
+        <br/>
         <div className="site-layout-content">
           <div className="front-img">
-            <img src='首页大图.png' alt='nothing' className='imgOfFront'></img>
+            <img src='./首页大图.png' alt='nothing' className='imgOfFront'></img>
           </div>
 
           <br />
@@ -126,7 +85,18 @@ function App() {
               </Row>
             </div>
             <div className='list-group'>
-              <Listli />
+              {/* {proList
+                ? proList.map((item) => (
+                  <Listli
+                    key={item.articleId}
+                    item={item}
+                    title="钱塘大讲坛"
+                    breadCrumb={['社科普及', '钱塘大讲坛']}
+                    list={proList}
+                  ></Listli>
+                ))
+                : ''} */}
+                <Listli />
             </div>
           </div>
         </div>

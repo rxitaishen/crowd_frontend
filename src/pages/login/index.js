@@ -30,9 +30,9 @@ const NormalLoginForm = () => {
 
 
 
-  useEffect(() => {
-    store.dispatch(logout())
-  })
+  // useEffect(() => {
+  //   store.dispatch(logout)
+  // })
   return (
     <div className='container'>
       <h1>请登录</h1>

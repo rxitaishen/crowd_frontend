@@ -3,12 +3,30 @@ import 'antd/dist/antd.css';
 import './index.css';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Router, Route, browserHistory,Link} from 'react-router-dom'
-
+import { Router, Route, useHistory,Link} from 'react-router-dom'
+import {login,logout} from '../../redux/login_action'
+import store from '../../redux/store'
+import axios from'axios'
 
 const NormalLoginForm = () => {
+
+  const history = useHistory()
+
   const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+    console.log('Received valuess of form: ', values);
+    axios.post(`/api/register`,values).then(
+      res=>{
+          console.log('res=>',res.data); 
+          if(res.data=="注册成功"){
+            store.dispatch(login())
+            console.log('注册成功',store.getState());
+            history.push('/')
+          }
+          else if(res.data=="登录失败"){
+              alert("登录失败，请注册")
+          }
+      }
+  )    
   };
 
   return (
@@ -23,7 +41,7 @@ const NormalLoginForm = () => {
         onFinish={onFinish}
       >
         <Form.Item
-          name="username"
+          name="userName"
           rules={[
             {
               required: true,
@@ -34,7 +52,7 @@ const NormalLoginForm = () => {
           <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
         </Form.Item>
         <Form.Item
-          name="password"
+          name="passWord"
           rules={[
             {
               required: true,
@@ -51,8 +69,7 @@ const NormalLoginForm = () => {
 
         <Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">
-          <Link to="/" >
-            注册</Link>
+            注册
           </Button>
           已有账号？ <Link to="/login">去登录</Link>
         </Form.Item>

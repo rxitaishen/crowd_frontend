@@ -4,7 +4,7 @@ import App from './App';
 import Details from './pages/details';
 import Login from './pages/login';
 import Register from './pages/register';
-
+import RaiseCrowd from './pages/raisecrowd';
 const BasicRoute = () => (
     <HashRouter>
         <Switch>
@@ -12,6 +12,9 @@ const BasicRoute = () => (
             <Route exact path="/login" component={Login}/>
             <Route exact path="/register" component={Register}/>
             <Route exact path="/detail" component={Details}/>
+            {/* <Route exact path="/historyProject" component={Details}/> */}
+            <Route exact path="/raiseCrowd" component={RaiseCrowd}/>
+
         </Switch>
     </HashRouter>
 );

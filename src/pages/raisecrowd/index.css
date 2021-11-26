@@ -1,0 +1,90 @@
+.img-up-form{
+    margin-left: 100px;
+}
+#imageLeftFrom{
+    width: 681.200px;
+    height: 600.600px;
+}
+#divide{
+    border-top: 15px solid #2DD1B1;
+    border-radius:17px;
+}
+.site-layout-content {
+    min-height: 280px;
+    padding: 24px;
+    border-radius:17px;
+    overflow: hidden;
+    background: #fff;
+  }
+  #components-layout-demo-top .logo {
+    float: left;
+    width: 120px;
+    height: 31px;
+    margin: 16px 24px 16px 0;
+    background: rgba(255, 255, 255, 0.3);
+  }
+  .logo {
+    float: left;
+    margin-top: -12px;
+    height: 85px;
+  }
+  .raise{
+    float:left;
+  }
+  .front-img{
+    display:flex;
+  }
+  .imgOfFront{
+    width: 100%;
+  }
+  .ant-layout-header{
+    margin-top: 0.5rem;
+    /* margin-bottom: 10px; */
+    padding:0px 12%;
+    background: #fff;
+    
+  }
+  .ant-menu-overflow-item{
+    transition: all .5s;
+    overflow: hidden; /* 让溢出的内容隐藏起来。意思是让下方的橙色方形先躲起来 */
+  }
+  .ant-menu-overflow-item:hover{
+    /* box-shadow: 0 0 15px #AAA; */
+    top: -5px;
+  }
+  
+  .topText{
+    margin-top:0.5rem;
+    display:flex;
+    flex-direction: row-reverse
+  }
+  .topText-child{
+    padding-right: 20px;
+    border-right: 1px solid #252947; /*每个li之间有间隔线*/
+    margin-right: 20px;
+  }
+  .topText-child:hover{
+    cursor: pointer;
+    color: rgb(11, 105, 194)
+  }
+  .list-group{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .loginOrRegister{
+    float: right;
+    margin-top: -63px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .login:hover{
+    cursor: pointer;
+  }
+  
+  .register:hover{
+    cursor: pointer;
+  }
