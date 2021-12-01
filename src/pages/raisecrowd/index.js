@@ -222,13 +222,9 @@ function RaiseCrowd() {
                                         <Form.Item
                                             label="上传封面"
                                             name="indexImage"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: '请输入'
-                                                }
-                                            ]}
+                                            
                                         >
+                                            <span style={{ color :'red'}}>注意！</span>上传的第一张图将作为封面
                                             <Dragger {...props} style={{ width: '300px' }}>
                                                 <p className="ant-upload-drag-icon">
                                                     <InboxOutlined />

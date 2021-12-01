@@ -87,22 +87,13 @@ function Mycrowd() {
                 layout="inline"
                 onFinish={handleSubmit}
               >
-                <Form.Item label="征文名称：" name="essaysName">
+                <Form.Item label="项目名称：" name="essaysName">
                   <Input placeholder="请输入" style={{ width: '212px' }} maxLength="10" />
                 </Form.Item>
-                <Form.Item label="类别：" name="categoryName">
-                  <Input placeholder="请输入" style={{ width: '212px' }} maxLength="10" />
-                </Form.Item>
-
-                <Form.Item label="工作单位：" name="company">
+                <Form.Item label="项目状态：" name="categoryName">
                   <Input placeholder="请输入" style={{ width: '212px' }} maxLength="10" />
                 </Form.Item>
 
-                <Form.Item label="提交时间：" name="createTime">
-                  <Space direction="vertical">
-                    <DatePicker onChange={onChange} />
-                  </Space>
-                </Form.Item>
                 <Form.Item name="anniu">
                   <Button type="primary" htmlType="submit">
                     查询
@@ -116,14 +107,7 @@ function Mycrowd() {
               {proList
                 ? proList.map((item) => (
                   <Listli
-                    proName_father={item.name}
-                    proDescription_father={item.description}
-                    proViewNum_father={item.viewNum}
-                    proSuportNum_father={item.suportNum}
-                    proTimeStart_father={item.timeStart}
-                    proTimeEnd_father={item.timeEnd}
-                    proMoneyTarget_father={item.moneyTarget}
-                    proMoneyHave_father={item.moneyHave}
+                    {...item}
                   ></Listli>
                 ))
                 : ''}

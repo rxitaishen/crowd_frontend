@@ -1,56 +1,56 @@
 import { Layout, Menu, Breadcrumb, Button } from 'antd';
+import {useEffect,useState} from 'react';
 import { Statistic, Card, Row, Col, Avatar, Divider } from 'antd';
 import { FieldTimeOutlined, MoneyCollectOutlined,LikeOutlined ,EyeOutlined } from '@ant-design/icons';
 import axios from 'axios'
 import './index.css'
 const { Meta } = Card;
-const listli = (props) => {
+const Listli = (props) => {
     // const productImg_children = props.proImg_father;
-    const proName_children = props.proName_father;
-    const proDescription_children = props.proDescription_father;
-    const proViewNum_children = props.proViewNum_father;
-    const proSuportNum_children = props.proSuportNum_father;
-    const proTimeStart_children = props.proTimeStart_father;
-    const proTimeEnd_children = props.proTimeEnd_father;
-    const proMoneyTarget_children = props.proMoneyTarget_father;
-    const proMoneyHave_children = props.proMoneyHave_father;
+    // const proName_children = props.proName_father;
+    // const proDescription_children = props.proDescription_father;
+    // const proViewNum_children = props.proViewNum_father;
+    // const proSuportNum_children = props.proSuportNum_father;
+    // const proTimeStart_children = props.proTimeStart_father;
+    // const proTimeEnd_children = props.proTimeEnd_father;
+    // const proMoneyTarget_children = props.proMoneyTarget_father;
+    // const proMoneyHave_children = props.proMoneyHave_father;
+    const {name,description,viewNum,suportNum,timeStart,timeEnd,moneyTarget,moneyHave} = props
+    const [firstImg,setFirstImg] = useState('') 
+    // document.getElementsByClassName('preview-div')[0].addEventListener("click", handleClick);
+ 
+    useEffect(()=>{
+        axios.get(`/api/projects/firstimgurl/${props.name}`).then((res)=>{
+            setFirstImg(res.data)
+        })
+    },[])
 
-    
+    const handleClick = () =>{
+        console.log('点击了项目卡片');
+        axios.get(`/api/projects/detail/${props.name}`).then((res)=>{
+            console.log(res.data);
+        })
+    }
+
+   
+
     return (
-        // <Card
-        //     hoverable
-        //     style={{ width: 240 }}
-        //     cover={<img alt="product" src={productImg_children} />}
-        // >
-        //     <Meta title={productName_children} description={productDescription_children} />
-        // </Card>
-        // <Card
-        //     hoverable
-        //     style={{ width: 300 }}
-        //     cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-        // >
-        //     <Meta title="Europe Street beat" description="www.instagram.com" />
-        //     <Meta
-        //         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-        //         title="Card title"
-        //         description="This is the description"
-        //     />
-        // </Card>,
+        <a onClick = {handleClick}>
         <div className='preview-div'>
             <div className='preview-img'>
-                <img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
+                <img alt="未找到项目封面" src={firstImg} />
             </div>
             <div className='preview-content'>
                 <div className='content-title'>
-                    <h1>{proName_children}</h1>
+                    <h1>{name}</h1>
                 </div>
                 <div className='content-describe' title='喵喵喵'>
-                    {proDescription_children}
+                    {description}
                 </div>
                 <div className='content-status'>
-                <div className='support-num'> <LikeOutlined />支持人数:{proSuportNum_children}</div>
-                <div className='view-num'><EyeOutlined />浏览:{proViewNum_children}</div>
-                <div className='last-time'><FieldTimeOutlined />{proTimeStart_children} 至 {proTimeEnd_children}</div>
+                <div className='support-num'> <LikeOutlined />支持人数:{suportNum}</div>
+                <div className='view-num'><EyeOutlined />浏览:{viewNum}</div>
+                <div className='last-time'><FieldTimeOutlined />{timeStart} 至 {timeEnd}</div>
                 </div>
                 <Divider />
                 <div className='target-num'>
@@ -60,7 +60,7 @@ const listli = (props) => {
                                 <Statistic
                                     style={{}}
                                     title="目标金额"
-                                    value={proMoneyTarget_children}
+                                    value={moneyTarget}
                                     precision={2}
                                     valueStyle={{ color: '#3f8600' ,fontSize:'14px'}}
                                     prefix={<MoneyCollectOutlined />}
@@ -73,7 +73,7 @@ const listli = (props) => {
                                 <Statistic
                                     style={{}}
                                     title="已支持金额"
-                                    value={proMoneyHave_children}
+                                    value={moneyHave}
                                     precision={2}
                                     valueStyle={{ color: '#3f8600' ,fontSize:'14px'}}
                                     prefix={<MoneyCollectOutlined />}
@@ -97,7 +97,7 @@ const listli = (props) => {
                     </Row>
                 </div>
             </div>
-        </div>
+        </div></a>
     )
 }
-export default listli
+export default Listli

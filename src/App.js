@@ -101,14 +101,15 @@ function App() {
               {proList
                 ? proList.map((item) => (
                   <Listli
-                    proName_father={item.name}
-                    proDescription_father={item.description}
-                    proViewNum_father={item.viewNum}
-                    proSuportNum_father={item.suportNum}
-                    proTimeStart_father={item.timeStart}
-                    proTimeEnd_father={item.timeEnd}
-                    proMoneyTarget_father={item.moneyTarget}
-                    proMoneyHave_father={item.moneyHave}
+                    // proName_father={item.name}
+                    // proDescription_father={item.description}
+                    // proViewNum_father={item.viewNum}
+                    // proSuportNum_father={item.suportNum}
+                    // proTimeStart_father={item.timeStart}
+                    // proTimeEnd_father={item.timeEnd}
+                    // proMoneyTarget_father={item.moneyTarget}
+                    // proMoneyHave_father={item.moneyHave}
+                    {...item}
                   ></Listli>
                 ))
                 : ''}
