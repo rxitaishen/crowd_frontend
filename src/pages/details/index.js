@@ -1,111 +1,60 @@
 
 import './index.css';
-import { Layout, Menu, Breadcrumb ,Button} from 'antd';
+import { useState, useEffect } from 'react'
+import { Layout, Menu, Breadcrumb, Button } from 'antd';
 import { Statistic, Card, Row, Col } from 'antd';
+import HeaderMenu from '../../components/header';
+import { Link, withRouter, useLocation } from 'react-router-dom'
+
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
-import Listli  from '../../components/Listli';
+import Listli from '../../components/Listli';
 const { Header, Content, Footer } = Layout;
 
 
-function App() {
+function Detail(props) {
+  const info = props.location.query.data_ori
+
+  const {img,data} = info
+  const {name,description,viewNum,suportNum,timeStart,timeEnd,moneyTarget,moneyHave,owner} = data
+  // const {data} = location.action.query
+  useEffect(() => {
+    console.log(props.location.query.data_ori);
+  }, [])
   return (
     <Layout className="layout">
-      <div className='topText'>
+
+      <HeaderMenu />
+      <Content >
+        <div className='content'>
           
-          <div className='topText-child'>联系我们</div>
-          <div className='topText-child'>关于我们</div>
-          <div className='topText-child'>客服热线</div>
-      </div>
-    <Header>
-      
-      <div className="logo" ><img src='众筹.png' style={{ height: '83px'}} alt="es-lint want to get" /></div>
-      <Menu  mode="horizontal"  defaultSelectedKeys={['0']}>
-      
-        {/* {new Array(5).fill(null).map((_, index) => {
-          const key = index + 1;
-          return <Menu.Item key={key}>{`nav ${key}`}</Menu.Item>
-        })} */}
-        <Menu.Item key={0}>首页</Menu.Item>
-        <Menu.Item key={1}>产品众筹</Menu.Item>
-        <Menu.Item key={2}>历史项目</Menu.Item>
-        <Menu.Item key={3}><Button >发起众筹</Button></Menu.Item>
-      </Menu>
-      
-    </Header>
-    <Content style={{ padding: '0 50px' }}>
-      <Breadcrumb style={{ margin: '16px 0' }}>
-        <Breadcrumb.Item>Home</Breadcrumb.Item>
-        <Breadcrumb.Item>Details</Breadcrumb.Item>
-      </Breadcrumb>
-      <div className="site-layout-content">
-      <div className="front-img">
-            <img src='首页大图.png' alt='nothing' className='imgOfFront'></img>
-        </div>
-      
-        <br/>
-        <br/>
-        <div className="front-num">
-          <div className="site-statistic-demo-card">
-            <Row gutter={8}>
-              <Col span={6}>
-                <Card hoverable>
-                  <Statistic
-                    style={{}}
-                    title="项目总数"
-                    value={489}
-                    precision={2}
-                    valueStyle={{ color: '#3f8600' }}
-                    prefix={<ArrowUpOutlined />}
-                    
-                  />
-                </Card>
-              </Col>
-              <Col span={6}>
-                <Card hoverable>
-                  <Statistic
-                    title="预约金额"
-                    value={1156023.21}
-                    precision={2}
-                    valueStyle={{ color: '#cf1322' }}
-                    prefix={<ArrowDownOutlined />}
-                    
-                  />
-                </Card>
-              </Col>
-              <Col span={6}>
-                <Card hoverable>
-                  <Statistic
-                    title="支持人次"
-                    value={12650}
-                    precision={2}
-                    valueStyle={{ color: '#3f8600' }}
-                    prefix={<ArrowUpOutlined />}
-                    
-                  />
-                </Card>
-              </Col>
-              <Col span={6}>
-                <Card hoverable>
-                  <Statistic
-                    title="支持金额"
-                    value={21045866.26}
-                    precision={2}
-                    valueStyle={{ color: '#3f8600' }}
-                    prefix={<ArrowUpOutlined />}
-                  />
-                </Card>
-              </Col>
-            </Row>
-          </div>
-          <div className='list-group'>
-            <Listli/>
+          <div className='content-up'>
+            <div className='content-upleft'>
+              <div className='title'>
+                <span>ceac</span>
+              </div>
+              <div  className='imgdiv'>
+                <img src={img[0]} style={{width:'100%',height:'290px'}}/>
+              </div>
             </div>
+            <div className='content-upright'>
+              <div className='raise-money'>
+                <span className='text'>目前累计资金</span>
+                <span>{moneyHave}</span>
+                <span>此项目须在{timeEnd}前，获得{moneyTarget}的支持才可成功！</span>
+              </div>
+              <div className='status'><span>成交数：</span><span>剩余时间：</span></div>
+              <Button>立即支持</Button>
+              <div className='owner'>
+                <div className='owner-pic'>antd头像</div>
+                <div className='owner-name'>{owner}</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </Content>
-    <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-  </Layout>)
-  
+      </Content>
+      <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+    </Layout>)
+
 }
 
-export default App;
+export default withRouter(Detail);

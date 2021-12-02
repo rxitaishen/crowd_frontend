@@ -15,6 +15,7 @@ const { Header, Content, Footer } = Layout;
 
 const { RangePicker } = DatePicker;
 var date1_hou = '';
+var fileArray = [];
 var str = window.location.host.split(':');
 console.log('window.location.host', str[0]);
 function RaiseCrowd() {
@@ -66,10 +67,14 @@ function RaiseCrowd() {
                     }
                 }
                 //加入文件流
-                tempObj.append('file', file);
+                if (Object.keys(fileArray).length != 0) {
+                    for (let i = 0; i < fileArray.length; i++) {
+                    tempObj.append('file', fileArray[i]);
+                    }
+                }
                 tempObj.append('timeStart', date1_hou.startTime);
                 tempObj.append('timeEnd', date1_hou.endTime);
-
+                fileArray = [];
                 axios.post(`/api/projects/addproject`,tempObj).then( res =>{
                     console.log('res=>',res.data); 
                     if(res.data=="添加成功"){
@@ -106,12 +111,23 @@ function RaiseCrowd() {
         onChange(info) {
             console.log('info', info);
             const { status } = info.file;
-            if (status !== 'uploading') {
+            if (typeof status === 'undefined') {
                 console.log(info.file, info.fileList);
                 setFileList(info.fileList); //截获文件流数组
                 console.log('file的类型是', typeof file); //是个obj
                 setFile(info.file); //截获文件流数组
+                //添加问价
+                fileArray.push(info.file); //截获文件流数组
+                console.log('fileArray的长度是',fileArray.length);
             }
+            if (status === 'removed') {
+        
+                //删除文件
+                fileArray.splice(
+                  fileArray.findIndex((item) => item.name === info.file.name),
+                  1
+                );
+              }
             if (status === 'done') {
                 message.success(`${info.file.name} 成功上传文件.`);
             } else if (status === 'error') {

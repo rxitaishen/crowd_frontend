@@ -3,6 +3,7 @@ import {useEffect,useState} from 'react';
 import { Statistic, Card, Row, Col, Avatar, Divider } from 'antd';
 import { FieldTimeOutlined, MoneyCollectOutlined,LikeOutlined ,EyeOutlined } from '@ant-design/icons';
 import axios from 'axios'
+import { Link ,useHistory,withRouter } from 'react-router-dom'
 import './index.css'
 const { Meta } = Card;
 const Listli = (props) => {
@@ -18,7 +19,7 @@ const Listli = (props) => {
     const {name,description,viewNum,suportNum,timeStart,timeEnd,moneyTarget,moneyHave} = props
     const [firstImg,setFirstImg] = useState('') 
     // document.getElementsByClassName('preview-div')[0].addEventListener("click", handleClick);
- 
+    // const history = useHistory()
     useEffect(()=>{
         axios.get(`/api/projects/firstimgurl/${props.name}`).then((res)=>{
             setFirstImg(res.data)
@@ -28,7 +29,7 @@ const Listli = (props) => {
     const handleClick = () =>{
         console.log('点击了项目卡片');
         axios.get(`/api/projects/detail/${props.name}`).then((res)=>{
-            console.log(res.data);
+            props.history.push({pathname:'/detail', query:{data_ori:res.data}})
         })
     }
 
@@ -100,4 +101,4 @@ const Listli = (props) => {
         </div></a>
     )
 }
-export default Listli
+export default withRouter( Listli)
