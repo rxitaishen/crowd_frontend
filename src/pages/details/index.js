@@ -1,23 +1,70 @@
 
 import './index.css';
-import { useState, useEffect } from 'react'
-import { Layout, Menu, Breadcrumb, Button } from 'antd';
-import { Statistic, Card, Row, Col } from 'antd';
+import { useState, useEffect,useRef  } from 'react'
+import { Layout, Progress, InputNumber, Modal } from 'antd';
+import store from '../../redux/store'
 import HeaderMenu from '../../components/header';
+import axios from 'axios'
 import { Link, withRouter, useLocation } from 'react-router-dom'
-
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
-import Listli from '../../components/Listli';
 const { Header, Content, Footer } = Layout;
 
 
 function Detail(props) {
   const info = props.location.query.data_ori
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const { img, data } = info
   const { name, description, viewNum, suportNum, timeStart, timeEnd, moneyTarget, moneyHave, owner } = data
   // const {data} = location.action.query
   const [leftDays, setLeftDays] = useState('')
+  const [suport, setSuport] = useState(suportNum) //支持人数
+  const [money, setMoney] = useState(moneyHave)  //已有的钱
+  const [moneyProgress,setMoneyProgress] = useState(parseInt(moneyHave/moneyTarget)*100) //已有钱的进度
+  const model = useRef()
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+    console.log(model.current.value);
+    if (store){
+      console.log('支持成功');
+      let sNum = parseInt(model.current.value);
+      let obj = {name:name,num:sNum}
+      axios.post(`/api/projects/suport`,obj).then((res)=>{
+        let mHave =res.data
+        console.log('返回的参数为',mHave);
+        setMoney(mHave)
+        console.log('捐款了',parseInt((mHave/moneyTarget)*100))
+        setMoneyProgress(parseInt((mHave/moneyTarget)*100)) 
+        axios.get(`/api/projects/suport/${name}`).then((res)=>{
+          setSuport(res.data)
+        })
+      })}
+      
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleSuport = () => {
+    if (store.getState() !== 1) {
+      console.log('未登录')
+      alert('未登录，请先登录')
+      props.history.push('/login')
+    }
+    else {
+      
+      showModal()
+    }
+  }
+
+  function onChange(value) {
+    console.log('changed', value);
+  }
+
 
   function Thistime() {//当前日期
     var date = new Date();
@@ -63,17 +110,28 @@ function Detail(props) {
             <div className='content-upright'>
               <div className='raise-money'>
                 <span className='text' id='text'>目前累计资金</span>
-                <span className='text' id='money'>{moneyHave}</span>
+                <span className='text' id='money'>{money}</span>
                 <span className='text' id='tishi'>此项目须在{timeEnd}前，获得<span id='money-target'>{moneyTarget}</span>的支持才可成功！</span>
               </div>
               <div className='status'>
+                <div className='status-txt'>
                 <span className='num'>{leftDays}</span>
                 <span className='txt'>剩余时间</span>
-                <span className='num'>{suportNum}人</span>
-                <span className='txt'>支持人数</span>
+                <span className='num'>{suport}</span>
+                <span className='txt'>支持数</span>
+                </div>
+                <div className='progress'>
+                <Progress type="dashboard" percent={moneyProgress} />
+                <span className='txt'>筹资进度</span>
+                </div>
               </div>
               <div id='suport-rightnow-div'>
-                <a id='suport-rightnow'>立即支持</a>
+                <a id='suport-rightnow' onClick={handleSuport}>立即支持</a>
+                <Modal title="请输入支持金额" width={300} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                  <div className='modalnum'> 
+                  支持 <InputNumber ref={model}  onChange={onChange} /> 元
+                </div>
+                </Modal>
               </div>
               {/* <div className='owner'>
                 <div className='owner-pic'>antd头像</div>
