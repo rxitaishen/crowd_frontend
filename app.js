@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
+const mineType = require("mime-types");
+var multiparty = require("multiparty");
 
 users = require('./models/users');
 projects = require('./models/projects');
@@ -13,6 +15,21 @@ suportrecords = require('./models/suportrecords');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+
+
+function imgToBase64(url) {
+	try {
+		let imgurl = url;
+		let imageData = fs.readFileSync(imgurl); //从根目录访问
+		if (!imageData) return "";
+		let bufferData = Buffer.from(imageData).toString("base64");
+		let base64 = "data:" + mineType.lookup(imgurl) + ";base64," + bufferData;
+		return base64;
+	} catch (error) {
+		return "";
+	}
+}
+
 
 
 //===============链接到mongodb==================//
@@ -123,17 +140,45 @@ app.post('/api/projects/suportRecord/add', (req, res, next) => {
 });
 
 
+
+
 //===============项目==================//
+
+function readFiles(pathName, obj) {
+	return new Promise(resolve => {
+		fs.readdir(pathName, (err, files) => {
+			var dirs = files
+			obj.firstImg = dirs
+			console.log('promise中');
+			resolve('done');
+		})
+	})
+}
+
+async function addImgUrl(list,res) {
+	for (let j = 0; j < list.length; j++) {
+		let pathName = './public/test/' + list[j].name
+		console.log('promise前');
+		await readFiles(pathName, list[j].name)
+		console.log('promise后');
+	}
+	console.log('发送请求',list[0]);
+	res.send(list)
+}
+
 
 //查询所有项目
 app.get('/api/projects/search/all', (req, res, next) => {
 	console.log('搜索所有项目')
+	var resp = {}
 	projects.find((err, project) => {
 		if (err) {
 			throw err;
 		}
-		res.json(project);
-	});
+		// addImgUrl(project,res)
+		res.send(project)
+	})
+
 });
 
 //按项目名查询单个项目
@@ -144,7 +189,7 @@ app.post('/api/projects/search/name', (req, res, next) => {
 		if (err) {
 			throw err;
 		}
-		if (project.length != 0) { //findone 和find 返回值有区别，当找不到时 find返回空数组，findone返回null
+		if (project) { //findone 和find 返回值有区别，当找不到时 find返回空数组，findone返回null
 			console.log('proName不为null');
 			res.json(project);
 		}
@@ -179,20 +224,82 @@ app.post('/api/projects/search/owner', (req, res, next) => {
 app.post('/api/projects/addproject', (req, res, next) => {
 	console.log('添加用户支持记录,即用户支持了事情')
 	//req.body test {"name":"hahaha","description":"真的好啊錒","owner":"wu","moneyHave":1386,"moneyTarget":389260,"timeStart":"","timeEnd":"","suportNum":131,"suportBaseNum":786,"viewNum":699}
-	projects.create(req.body, (err, userSuport) => {
-		console.log(userSuport)
+
+	//生成multiparty对象，并配置上传目标路径
+	var form = new multiparty.Form({ uploadDir: './public/test' });
+	form.parse(req, function (err, fields, files) {
 		if (err) {
-			throw err;
-		}
-		if (userSuport) { //findone 和find 返回值有区别，当找不到时 find返回空数组，findone返回null
-			console.log('项目添加成功');
-			res.json('添加成功');
+			res.send(err)
 		}
 		else {
-			console.log('项目添加失败');
-			res.send("添加失败")
+			console.log(fields, 'fields');
+			console.log(files, 'files');
+			fs.mkdir("./public/test/" + fields.name[0], function (error) {
+				if (error) {
+					console.log(error);
+					return false;
+				}
+				console.log('创建项目目录成功');
+			})
+			var j = 0
+			//重命名文件
+			if (Object.keys(files).length != 0) {
+				console.log('文件为', files);
+				files.file.map(item => {
+					j++
+					//分割字符
+					var path_arr = item.path.split("\\");
+					var path_save = path_arr[0] + "\\" + path_arr[1] + "\\" + fields.name[0] + "\\" + "(" + j + ")" + item.originalFilename
+					//替换名字
+					fs.renameSync(item.path, path_save)
+				});
+			}
+
+			var obj = {}
+			for (let key in fields) {
+				console.log('key: ' + key + ',' + 'value: ' + obj[key])
+				console.log(fields[key][0]);
+				obj[key] = fields[key][0]
+			}
+			obj.moneyHave = 0
+			obj.suportNum = 0
+			obj.viewNum = 0
+
+			console.log("obj", obj instanceof Object);
+
+			projects.create(obj, (err, userSuport) => {
+				console.log(userSuport)
+				if (err) {
+					throw err;
+				}
+				if (userSuport) { //findone 和find 返回值有区别，当找不到时 find返回空数组，findone返回null
+					console.log('项目添加成功');
+					res.json('添加成功');
+				}
+				else {
+					console.log('项目添加失败');
+					res.send("添加失败")
+				}
+			});
+			// projects.create(fields, (err, userSuport) => {
+			// 	console.log(userSuport)
+			// 	if (err) {
+			// 		throw err;
+			// 	}
+			// 	if (userSuport) { //findone 和find 返回值有区别，当找不到时 find返回空数组，findone返回null
+			// 		console.log('项目添加成功');
+			// 		res.json('添加成功');
+			// 	}
+			// 	else {
+			// 		console.log('项目添加失败');
+			// 		res.send("添加失败")
+			// 	}
+			// });
 		}
+		//...将文件路径和标题存入数据库
 	});
+
+
 
 	// //接收前台POST过来的base64
 	// var imgData = req.body.imgData; //第一张图片为封面
@@ -212,6 +319,77 @@ app.post('/api/projects/addproject', (req, res, next) => {
 	// }
 
 });
+
+//查看项目详情
+app.get('/api/projects/detail/:name', (req, res) => {
+	let pathName = './public/test/' + req.params.name;
+	console.log('pathName: ', pathName);
+	var resp = {}
+	var dirs = []
+	var img = []
+	fs.readdir(pathName, (err, files) => {
+		dirs = files
+		if(dirs){
+			for (let i = 0; i < dirs.length; i++) {
+				var base = imgToBase64(pathName + '/' + dirs[i])
+				img.push(base)
+			}
+		}
+		
+		
+		projects.findOne({ "name": req.params.name }, (err, project) => {
+			if (err) {
+				throw err;
+			}
+			if (project) { //findone 和find 返回值有区别，当找不到时 find返回空数组，findone返回null
+				console.log('proName不为null');
+				resp.img = img
+				resp.data = project
+				res.send(resp)
+			}
+			else {
+				console.log('proName为null');
+				res.send("未找到相关信息")
+			}
+		});
+	})
+
+})
+
+//获取图片base64
+app.get('/api/projects/imgurl/:name', (req, res) => {
+	let pathName = './public/test/' + req.params.name;
+	console.log('pathName: ', pathName)
+	var dirs = []
+	var img = []
+	fs.readdir(pathName, (err, files) => {
+		dirs = files
+		for (let i = 0; i < dirs.length; i++) {
+			var base = imgToBase64(pathName + '/' + dirs[i])
+			img.push(base)
+		}
+		res.send(img)
+	})
+})
+
+//获取封面
+app.get('/api/projects/firstimgurl/:name', (req, res) => {
+	let pathName = './public/test/' + req.params.name;
+	console.log('pathName: ', pathName)
+	var dirs = []
+	fs.readdir(pathName, (err, files) => {
+		console.log('获取封面',files);
+		if (files !== undefined){
+			dirs = files
+			var base = imgToBase64(pathName + '/' + dirs[0])
+			res.send(base)
+		}
+		else{
+			res.send('未找到对应封面')
+		}
+		//前台就给封面设置一个state变量好了，然后监听这个state变量
+	})
+})
 
 //删除用户项目
 app.delete('/api/projects/:name', (req, res) => {
