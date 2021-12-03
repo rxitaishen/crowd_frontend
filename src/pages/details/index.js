@@ -18,7 +18,8 @@ function Detail(props) {
   const [leftDays, setLeftDays] = useState('')
   const [suport, setSuport] = useState(suportNum) //支持人数
   const [money, setMoney] = useState(moneyHave)  //已有的钱
-  const [moneyProgress,setMoneyProgress] = useState(parseInt(moneyHave/moneyTarget)*100) //已有钱的进度
+  // const [moneyProgress,setMoneyProgress] = useState(parseInt(moneyHave/moneyTarget)*100) //已有钱的进度
+  const [moneyProgress,setMoneyProgress] = useState(parseInt((moneyHave/moneyTarget)*100)) 
   const model = useRef()
 
   const showModal = () => {

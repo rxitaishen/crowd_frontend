@@ -6,6 +6,8 @@ import Login from './pages/login';
 import Register from './pages/register';
 import RaiseCrowd from './pages/raisecrowd';
 import MyCrowd from './pages/mycrowd'
+import SortPage from './pages/sortpage';
+import Completepage from './pages/completepage';
 const BasicRoute = () => (
     <HashRouter>
         <Switch>
@@ -16,6 +18,8 @@ const BasicRoute = () => (
             {/* <Route exact path="/historyProject" component={Details}/> */}
             <Route exact path="/raiseCrowd" component={RaiseCrowd}/>
             <Route exact path="/mycrowd" component={MyCrowd}/>
+            <Route exact path="/sortPage" component={SortPage}/>
+            <Route exact path="/comletepage" component={Completepage}/>
         </Switch>
     </HashRouter>
 );

@@ -18,8 +18,37 @@ const Listli = (props) => {
     // const proMoneyHave_children = props.proMoneyHave_father;
     const {name,description,viewNum,suportNum,timeStart,timeEnd,moneyTarget,moneyHave} = props
     const [firstImg,setFirstImg] = useState('') 
+    const [leftDays, setLeftDays] = useState('')
+    const [view, setView] = useState(viewNum)
     // document.getElementsByClassName('preview-div')[0].addEventListener("click", handleClick);
     // const history = useHistory()
+
+    
+  function Thistime() {//当前日期
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var time = year + "-" + month + "-" + day;
+    return time;
+  }
+  function DateDiff(sDate1, sDate2) {  //sDate1和sDate2是yyyy-MM-dd格式
+    var aDate, oDate1, oDate2, iDays;
+    aDate = sDate1.split("-");
+    oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);  //转换为yyyy-MM-dd格式
+    aDate = sDate2.split("-");
+    oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
+    iDays = parseInt((oDate1 - oDate2) / 1000 / 60 / 60 / 24); //把相差的毫秒数转换为天数
+    return iDays;  //返回相差天数
+  }
+
+
+  useEffect(() => {
+    let timeLeft = DateDiff(timeEnd, Thistime())
+    timeLeft < 0 ? setLeftDays('已截止') : setLeftDays(timeLeft + ' 天')
+
+  }, [])
+
     useEffect(()=>{
         axios.get(`/api/projects/firstimgurl/${props.name}`).then((res)=>{
             setFirstImg(res.data)
@@ -28,9 +57,13 @@ const Listli = (props) => {
 
     const handleClick = () =>{
         console.log('点击了项目卡片');
-        axios.get(`/api/projects/detail/${props.name}`).then((res)=>{
-            props.history.push({pathname:'/detail', query:{data_ori:res.data}})
+        axios.get(`/api/projects/view/${props.name}`).then((res)=>{
+            axios.get(`/api/projects/detail/${props.name}`).then((res)=>{
+                props.history.push({pathname:'/detail', query:{data_ori:res.data}})
+            })
         })
+        
+
     }
 
    
@@ -87,7 +120,7 @@ const Listli = (props) => {
                                 <Statistic
                                     style={{}}
                                     title="剩余时间"
-                                    value={213}
+                                    value={leftDays}
                                     precision={2}
                                     valueStyle={{ color: '#3f8600' ,fontSize:'14px'}}
                                     prefix={<FieldTimeOutlined />}

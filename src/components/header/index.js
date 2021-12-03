@@ -4,6 +4,7 @@ import { Statistic, Card, Row, Col, Avatar, Layout, Menu, Breadcrumb, Button, Dr
 import store from '../../redux/store'
 import { login, logout } from '../../redux/login_action'
 import RaiseCrowd from '../../pages/raisecrowd';
+import SortPage from '../../pages/sortpage';
 const { Header, Content, Footer } = Layout;
 
 
@@ -14,7 +15,14 @@ function HeaderMenu() {
     console.log('登出');
     store.dispatch(logout())
   }
-
+  const sortPage = () =>{
+    console.log('点击了分类的项目');
+    history.push("/sortpage")
+  }
+  const completePage = () =>{
+    console.log('点击了完成的项目');
+    history.push("/completePage")
+  }
   //设置头像下拉菜单
   const userMenu = (
     <Menu>
@@ -91,8 +99,8 @@ function HeaderMenu() {
           return <Menu.Item key={key}>{`nav ${key}`}</Menu.Item>
         })} */}
             <Menu.Item key={0} onClick={indexPage}>首页</Menu.Item>
-            <Menu.Item key={1}>产品众筹</Menu.Item>
-            <Menu.Item key={2}>历史项目</Menu.Item>
+            <Menu.Item key={1} onclick={sortPage}>产品众筹</Menu.Item> {/*正在众筹的项目*/}
+            <Menu.Item key={2} onclick={completePage}>历史项目</Menu.Item>{/*已经结束的项目*/}
             <Menu.Item key={3}  onClick={raiseCrowd}>发起众筹</Menu.Item>
 
           </Menu>
