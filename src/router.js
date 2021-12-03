@@ -19,7 +19,7 @@ const BasicRoute = () => (
             <Route exact path="/raiseCrowd" component={RaiseCrowd}/>
             <Route exact path="/mycrowd" component={MyCrowd}/>
             <Route exact path="/sortPage" component={SortPage}/>
-            <Route exact path="/comletepage" component={Completepage}/>
+            <Route exact path="/completepage" component={Completepage}/>
         </Switch>
     </HashRouter>
 );
