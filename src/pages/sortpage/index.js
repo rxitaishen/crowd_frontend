@@ -8,6 +8,7 @@ import Listli from '../../components/Listli';
 import axios from 'axios'
 const { Header, Content, Footer } = Layout;
 
+var data_ori = []
 function SortPage() {
 
   const [proList, setProList] = useState([])
@@ -17,90 +18,71 @@ function SortPage() {
       res => {
         if (res.data.length != 0) {
           // console.log('查询所有项目得到结果', res);
-          setProList(res.data)
+          
+          data_ori = res.data
+          deleteList(data_ori)
+          console.log('原始数据是',data_ori);
+          setProList(data_ori)
         }
         else {
           console.log('没有项目');
         }
       }
     )
-  }, [])
+  },[])
 
+  function sortDataHot(a, b) {
+    return b.viewNum - a.viewNum
+  }
+  function sortDataCp(a, b) {
+    let num1 = parseInt((a.moneyHave/a.moneyTarget)*100)
+    let num2 = parseInt((b.moneyHave/b.moneyTarget)*100)
+    return num2 - num1
+  }
+  function deleteList(num){
+    for (let i = 0; i < num.length; i++) {
+      if (num[i]["moneyHave"] >= num[i]["moneyTarget"]) {
+        num.splice(i, 1);
+          i--;
+      }
+    }
+  }
+  const handleIndex = () =>{
+    console.log('点击默认');
+    setProList(data_ori);
+  }
   
+  const handleHot = () =>{
+    console.log('点击热门');//按浏览量
+    let data_temp = data_ori.concat()
+    data_temp.sort(sortDataHot);
+    setProList(data_temp)
+  }
+  const handleComplete = () =>{
+    console.log('点击完成');//按完成度
+    let data_temp = data_ori.concat()
+    data_temp.sort(sortDataCp);
+    setProList(data_temp)
+  }
   return (
     <Layout className="layout">
       <HeaderMenu />
       <Content style={{ padding: '0 50px' }}>
-        {/* <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb> */}
+        
         <br />
         <div className="site-layout-content">
           <div className="front-img">
             <img src='./首页大图.png' alt='nothing' className='imgOfFront'></img>
           </div>
         <div className="sort">
-          <div className="by-index">默认</div>
-          <div className='by-view'>最热门</div>
-          <div className="by-progress">最高完成度</div>
+        <a onClick={handleIndex}><div className="by-index">默认</div></a>
+        <a onClick={handleHot}><div className='by-view'>最热门</div></a>
+        <a onClick={handleComplete}><div className="by-progress">最高完成度</div></a>
         </div>
           <br />
           <br />
           <div className="front-num">
-            <div className="site-statistic-demo-card">
-              <Row gutter={8}>
-                <Col span={6}>
-                  <Card hoverable>
-                    <Statistic
-                      style={{}}
-                      title="项目总数"
-                      value={489}
-                      precision={2}
-                      valueStyle={{ color: '#3f8600' }}
-                      prefix={<ArrowUpOutlined />}
-
-                    />
-                  </Card>
-                </Col>
-                <Col span={6}>
-                  <Card hoverable>
-                    <Statistic
-                      title="预约金额"
-                      value={1156023.21}
-                      precision={2}
-                      valueStyle={{ color: '#cf1322' }}
-                      prefix={<ArrowDownOutlined />}
-
-                    />
-                  </Card>
-                </Col>
-                <Col span={6}>
-                  <Card hoverable>
-                    <Statistic
-                      title="支持人次"
-                      value={12650}
-                      precision={2}
-                      valueStyle={{ color: '#3f8600' }}
-                      prefix={<ArrowUpOutlined />}
-
-                    />
-                  </Card>
-                </Col>
-                <Col span={6}>
-                  <Card hoverable>
-                    <Statistic
-                      title="支持金额"
-                      value={21045866.26}
-                      precision={2}
-                      valueStyle={{ color: '#3f8600' }}
-                      prefix={<ArrowUpOutlined />}
-                    />
-                  </Card>
-                </Col>
-              </Row>
-            </div>
+            
             <div className='list-group'>
               {proList
                 ? proList.map((item) => (

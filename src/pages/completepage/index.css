@@ -77,3 +77,27 @@
 .register:hover{
   cursor: pointer;
 }
+
+.sort{
+  height:3rem;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+.sort div{
+  border-radius: 5px;
+  /* background-image: linear-gradient(#10B29A, #096557); */
+  background-color: #12D7B8;
+  margin-right: 10px;
+  border:5px solid #12D7B8;
+  font-size: 17px;
+  text-align: center;
+  width:5rem;
+  font-weight: 600;
+  color:white;
+  /* padding:0 2rem; */
+}
+.sort div a{
+  text-decoration:none;
+color:white;
+}

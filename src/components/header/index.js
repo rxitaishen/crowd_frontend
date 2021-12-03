@@ -94,21 +94,14 @@ function HeaderMenu() {
           <div className="logo" ><img src='众筹.png' style={{ height: '83px' }} alt="es-lint want to get" /></div>
           <Menu mode="horizontal" >
 
-            {/* {new Array(5).fill(null).map((_, index) => {
-          const key = index + 1;
-          return <Menu.Item key={key}>{`nav ${key}`}</Menu.Item>
-        })} */}
+            
             <Menu.Item key={0} onClick={indexPage}>首页</Menu.Item>
-            <Menu.Item key={1} onclick={sortPage}>产品众筹</Menu.Item> {/*正在众筹的项目*/}
-            <Menu.Item key={2} onclick={completePage}>历史项目</Menu.Item>{/*已经结束的项目*/}
+            <Menu.Item key={1} onClick={sortPage}>产品众筹</Menu.Item> 
+            <Menu.Item key={2} onClick={completePage}>历史项目</Menu.Item>
             <Menu.Item key={3}  onClick={raiseCrowd}>发起众筹</Menu.Item>
 
           </Menu>
           {cheackLogin()}
-          {/* <div className='loginOrRegister'>
-            <div className='login' ><Link to="/login" >登录</Link></div> \
-            <div className='register'><Link to="/register" >注册</Link></div>
-          </div> */}
         </div>
       </Header>
       </div>
