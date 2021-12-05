@@ -51,13 +51,13 @@ function Pinfo(props) {
                                     mode="inline"
                                 >
                                     <Menu.Item key="1" >
-                                        <Link to='/pinfo/pfrom'>个人设置</Link>
+                                    <Link to="/pinfo/pfrom">个人设置</Link>
                                     </Menu.Item>
                                     <Menu.Item key="2" >
                                         订单管理
                                     </Menu.Item>
                                     <Menu.Item key="3"  >
-                                    <Link to='/pinfo/projectfrom'>xiangm </Link>
+                                    <Link to='/pinfo/projectfrom'>项目管理 </Link>
                                     </Menu.Item>
                                     <Menu.Item key="4" >
                                         财富中心
@@ -69,10 +69,11 @@ function Pinfo(props) {
                             </div>
                         </Col>
                         <Col span={20}>
-                            <Router>
-                            <Route path='/pinfo/projectfrom' component={ProjectFrom}></Route>
-                            <Route path='/pinfo/pfrom' component={Pfrom}></Route>
-                            </Router>
+                        <Switch>
+							<Route path="/pinfo/pfrom" component={Pfrom}/>
+							<Route path="/pinfo/projectfrom" component={ProjectFrom}/>
+							<Redirect to="/pinfo/pfrom"/>
+						</Switch>
                         </Col>
                     </Row>
                 </div>
