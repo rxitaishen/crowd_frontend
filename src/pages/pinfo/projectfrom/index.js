@@ -53,7 +53,16 @@ const ProjectFrom = (props) => {
 
     return (
         <div className='projectfrom-form'>
-            <Table columns={columns} dataSource={data} scroll={{y:'1000px'}} />
+            <Table 
+            columns={columns} 
+            dataSource={data} 
+            scroll={{
+                y:'1000px'
+            }} 
+            pagination={{
+                howQuickJumper: true,
+                position:["right"]
+            }}/>
         </div>
     )
 }
