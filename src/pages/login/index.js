@@ -17,7 +17,8 @@ const NormalLoginForm = () => {
       res=>{
           console.log('res=>',res.data); 
           if(res.data=="登录成功"){
-            store.dispatch(login())
+            store.dispatch(login(values.userName))
+
             console.log('登陆成功',store.getState());
             history.push('/')
           }

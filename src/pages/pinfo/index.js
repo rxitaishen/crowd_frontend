@@ -26,7 +26,7 @@ function Pinfo(props) {
 
     //检测是否已登录，如果没登录就爆出消息去登录
     useEffect(() => {
-        if (store.getState() !== 1) {
+        if (!store.getState()) {
             console.log('未登录')
             alert('未登录，请先登录')
             props.history.push('/login')
@@ -40,24 +40,24 @@ function Pinfo(props) {
             <Content style={{ padding: '0 50px' }}>
                 <br />
                 <div id="divide" >  </div>
-                <div className="site-layout-content">
+                <div className="layout-pinfo">
                     <Row >
                         <Col span={4}>
                             <div className="img-up-form">
                                 <Menu
-                                    style={{ width: 256 }}
+                                    style={{ width: 150 }}
                                     defaultSelectedKeys={['1']}
                                     defaultOpenKeys={['sub1']}
                                     mode="inline"
                                 >
-                                    <Menu.Item key="1" >
-                                    <Link to="/pinfo/pfrom">个人设置</Link>
+                                    <Menu.Item key="1" onClick={handleClick1}>
+                                    个人设置
                                     </Menu.Item>
                                     <Menu.Item key="2" >
                                         订单管理
                                     </Menu.Item>
-                                    <Menu.Item key="3"  >
-                                    <Link to='/pinfo/projectfrom'>项目管理 </Link>
+                                    <Menu.Item key="3" onClick={handleClick2} >
+                                    项目管理 
                                     </Menu.Item>
                                     <Menu.Item key="4" >
                                         财富中心
@@ -69,11 +69,13 @@ function Pinfo(props) {
                             </div>
                         </Col>
                         <Col span={20}>
-                        <Switch>
-							<Route path="/pinfo/pfrom" component={Pfrom}/>
-							<Route path="/pinfo/projectfrom" component={ProjectFrom}/>
-							<Redirect to="/pinfo/pfrom"/>
-						</Switch>
+                            <div className='children'>
+                                <Switch>
+                                    <Route path="/pinfo/pfrom" component={Pfrom}/>
+                                    <Route path="/pinfo/projectfrom" component={ProjectFrom}/>
+                                    <Redirect to="/pinfo/pfrom"/>
+                                </Switch>
+                            </div>
                         </Col>
                     </Row>
                 </div>

@@ -48,7 +48,7 @@ function HeaderMenu() {
   //头像条件渲染
   const cheackLogin = () => {
     let loginStatus = store.getState()
-    if (loginStatus == 1) {
+    if (loginStatus ) {
       return (
         <div className='loginOrRegister'>
           <Dropdown overlay={userMenu}>

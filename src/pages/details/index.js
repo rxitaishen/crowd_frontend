@@ -51,7 +51,7 @@ function Detail(props) {
   };
 
   const handleSuport = () => {
-    if (store.getState() !== 1) {
+    if (!store.getState() ) {
       console.log('未登录')
       alert('未登录，请先登录')
       props.history.push('/login')

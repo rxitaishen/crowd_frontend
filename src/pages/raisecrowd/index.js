@@ -29,13 +29,13 @@ function RaiseCrowd() {
 
     //检测是否已登录，如果没登录就爆出消息去登录
     useEffect(()=>{
-        if(store.getState() !== 1){
+        if(!store.getState()){
             console.log('未登录')
             alert('未登录，请先登录')
             history.push('/login')
         }
     })
-   
+
 
     //重置表单
     const reset = () => {

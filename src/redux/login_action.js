@@ -3,5 +3,5 @@
 */
 import {LOGIN,LOGOUT} from './constant'
 
-export const login = () => ({type:LOGIN,data:1})
+export const login = (data=1) => ({type:LOGIN,data:data})
 export const logout = () => ({type:LOGOUT,data:0})
