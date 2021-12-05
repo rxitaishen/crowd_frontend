@@ -9,6 +9,7 @@ import axios from 'axios'
 const { Header, Content, Footer } = Layout;
 
 var date2_hou = ''
+var data_ori = []
 function Mycrowd() {
   const [form] = Form.useForm();
 
@@ -23,12 +24,7 @@ function Mycrowd() {
       //对象重构
       fieldsValue.create_time = date2_hou;
       console.log(fieldsValue);
-      //提交对象给后端
-      // demo1Api.search(fieldsValue).then((res) => {
-      //   console.log('提交了对象', res.data.data);
-      //   setEssay(res.data.data.rows);
-      //   //setChaxunTableHidden(false);
-      // });
+      
     });
   };
 
@@ -44,12 +40,23 @@ function Mycrowd() {
     console.log('表单已重置');
   };
 
+  function deleteList(num){
+    for (let i = 0; i < num.length; i++) {
+      if (num[i]["owner"] !== '胡泽乾') {
+        num.splice(i, 1);
+          i--;
+      }
+    }
+  }
+
   useEffect(() => {
     axios.get(`/api/projects/search/all`).then(
       res => {
         if (res.data.length != 0) {
           // console.log('查询所有项目得到结果', res);
-          setProList(res.data)
+          data_ori = res.data
+          deleteList(data_ori)
+          setProList(data_ori)
         }
         else {
           console.log('没有项目');
@@ -65,17 +72,8 @@ function Mycrowd() {
     <Layout className="layout">
       <HeaderMenu />
       <Content style={{ padding: '0 50px' }}>
-        {/* <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb> */}
         <br />
         <div className="site-layout-content">
-          {/* <div className="front-img">
-            <img src='./首页大图.png' alt='nothing' className='imgOfFront'></img>
-          </div> */}
-
           <br />
           <br />
           <div className="front-num">

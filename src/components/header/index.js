@@ -27,7 +27,7 @@ function HeaderMenu() {
   const userMenu = (
     <Menu>
       <Menu.Item key="0">
-        <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+        <a onClick={() => { history.push("/pinfo") }}>
           个人信息
         </a>
       </Menu.Item>

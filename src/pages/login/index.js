@@ -28,7 +28,14 @@ const NormalLoginForm = () => {
   )    
   };
 
-
+  // const onFinish = (values) =>{
+  //   axios.post(`/codf/code`).then((res,err) =>{
+  //     if(err){
+  //       console.log('出错',err.response.status);
+  //     }
+  //     console.log(res.status);
+  //   })
+  // }
 
   // useEffect(() => {
   //   store.dispatch(logout)
