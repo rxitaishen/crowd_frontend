@@ -6,13 +6,7 @@
 }
 .children{
   width: 90%;
+  min-height:218px;
   margin-left: 84px;
-  position: relative;
 }
 
-.ant-pagination{
-  
-	position: absolute;
-  bottom: 0px;
-  right: 0px;
-}

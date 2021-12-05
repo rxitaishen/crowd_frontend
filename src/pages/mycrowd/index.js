@@ -6,6 +6,7 @@ import { Form, DatePicker, Space, message, Input, Select, Button, Layout, Dropdo
 import { ArrowUpOutlined, ArrowDownOutlined, UserOutlined, DownOutlined } from '@ant-design/icons';
 import Listli from '../../components/Listli';
 import axios from 'axios'
+import store from '../../redux/store';
 const { Header, Content, Footer } = Layout;
 
 var date2_hou = ''
@@ -42,7 +43,7 @@ function Mycrowd() {
 
   function deleteList(num){
     for (let i = 0; i < num.length; i++) {
-      if (num[i]["owner"] !== '胡泽乾') {
+      if (num[i]["owner"] !== store.getState()) {
         num.splice(i, 1);
           i--;
       }

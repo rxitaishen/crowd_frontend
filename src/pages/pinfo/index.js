@@ -26,11 +26,6 @@ function Pinfo(props) {
 
     //检测是否已登录，如果没登录就爆出消息去登录
     useEffect(() => {
-        // if (!store.getState()) {
-        //     console.log('未登录')
-        //     alert('未登录，请先登录')
-        //     props.history.push('/login')
-        // }
     })
 
 

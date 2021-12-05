@@ -52,8 +52,8 @@ const ProjectFrom = (props) => {
     ];
 
     return (
-        <div className='pform-form'>
-            <Table columns={columns} dataSource={data}  />
+        <div className='projectfrom-form'>
+            <Table columns={columns} dataSource={data} scroll={{y:'1000px'}} />
         </div>
     )
 }
