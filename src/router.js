@@ -21,8 +21,8 @@ const BasicRoute = () => (
             <Route path="/mycrowd" component={MyCrowd} />
             <Route path="/sortPage" component={SortPage} />
             <Route path="/completepage" component={Completepage} />
-            <Route  path="/pinfo" component={Pinfo}/>
-            <Route  path="/" component={App} />
+            <Route path="/pinfo" component={Pinfo}/>
+            <Route path="/" component={App} />
 
         </Switch>
     </BrowserRouter>
