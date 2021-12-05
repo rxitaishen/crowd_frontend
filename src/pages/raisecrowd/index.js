@@ -198,6 +198,7 @@ function RaiseCrowd() {
                                                     message: '请输入'
                                                 }
                                             ]}
+                                            initialValue={store.getState()}
                                         >
                                             <Input placeholder="请输入" style={{ width: '212px' }} maxLength="10" />
                                         </Form.Item>

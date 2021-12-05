@@ -1,10 +1,18 @@
 
 .layout-pinfo{
   min-height: 550px;
-  padding: 24px;
+  padding: 28px 150px;
   background: #fff;
 }
 .children{
   width: 90%;
-  margin: 0 auto;
+  margin-left: 84px;
+  position: relative;
+}
+
+.ant-pagination{
+  
+	position: absolute;
+  bottom: 0px;
+  right: 0px;
 }
