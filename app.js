@@ -220,6 +220,102 @@ app.post('/api/projects/search/owner', (req, res, next) => {
 	});
 });
 
+//按名字给项目添加支持，post
+app.post('/api/projects/suport', (req, res, next) => {
+	console.log('搜索单个项目')
+	let t = req.body
+	console.log(t);
+	projects.findOne({ "name": t.name }, (err, project) => {
+		if (err) {
+			throw err;
+		}
+		if (project != null) { //findone 和find 返回值有区别，当找不到时 find返回空数组，findone返回null
+			let num = project.moneyHave + t.num
+			projects.updateOne({'name': t.name},  {moneyHave: num},(err, docs)=>{
+				if(err){
+					res.json('支持失败')
+				}
+				/**更新数据成功，紧接着查询数据 */
+				projects.findOne({ "name": t.name },(err, p)=>{
+					if(err){
+						res.json('支持失败')
+					}
+					res.json(p.moneyHave)
+				})
+			})
+		}
+		else {
+			console.log('proName为null');
+			res.send("未找到相关信息")
+		}
+	});
+});
+
+//按名字给项目添加支持
+app.get('/api/projects/suport/:name', (req, res, next) => {
+	console.log('用户添加支持')
+	let t = req.params.name
+	projects.findOne({ "name": t }, (err, project) => {
+		if (err) {
+			throw err;
+		}
+		if (project !== null) { //findone 和find 返回值有区别，当找不到时 find返回空数组，findone返回null
+			console.log('proName不为null');
+			let num = project.suportNum + 1
+			projects.updateOne({'name':t},  {suportNum: num},(err, docs)=>{
+				if(err){
+					res.json('支持失败')
+				}
+				/**更新数据成功，紧接着查询数据 */
+				projects.findOne({ "name": t },(err, p)=>{
+					if(err){
+						res.json('支持失败')
+					}
+					res.json(p.suportNum)
+				})
+			})
+			
+		}
+		else {
+			console.log('proName为null');
+			res.send("支持失败")
+		}
+	});
+});
+
+//按名字给项目添加访问量
+app.get('/api/projects/view/:name', (req, res, next) => {
+	console.log('用户添加支持')
+	let t = req.params.name
+	projects.findOne({ "name": t }, (err, project) => {
+		if (err) {
+			throw err;
+		}
+		if (project !== null) { //findone 和find 返回值有区别，当找不到时 find返回空数组，findone返回null
+			console.log('proName不为null');
+			console.log('proName不为null');
+			let num = project.viewNum + 1
+			projects.updateOne({'name':t},  {viewNum: num},(err, docs)=>{
+				if(err){
+					res.json('访问失败')
+				}
+				/**更新数据成功，紧接着查询数据 */
+				projects.findOne({ "name": t },(err, p)=>{
+					if(err){
+						res.json('访问失败')
+					}
+					res.json(p.viewNum)
+				})
+			})
+			
+		}
+		else {
+			console.log('proName为null');
+			res.send("访问成功")
+		}
+	});
+});
+
 //添加用户项目
 app.post('/api/projects/addproject', (req, res, next) => {
 	console.log('添加用户支持记录,即用户支持了事情')
