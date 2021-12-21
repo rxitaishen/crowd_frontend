@@ -33,19 +33,19 @@ const ProjectFrom = (props) => {
     const data = [
         {
             key: '1',
-            pName: 'John Brown',
+            pName: '胡泽乾',
             money: 32,
             status:'已截止'
         },
         {
             key: '2',
-            pName: 'Jim Green',
+            pName: '段可',
             money: 42,
             status:'已截止'
         },
         {
             key: '3',
-            pName: 'Joe Black',
+            pName: '流星',
             money: 32,
             status:'已截止'
         },
