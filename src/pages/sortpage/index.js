@@ -87,6 +87,7 @@ function SortPage() {
               {proList
                 ? proList.map((item) => (
                   <Listli
+                  key={item._id}
                     {...item}
                   ></Listli>
                 ))
