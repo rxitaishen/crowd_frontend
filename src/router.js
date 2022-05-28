@@ -11,9 +11,11 @@ import Completepage from './pages/completepage';
 import Pinfo from './pages/pinfo';
 import Pfrom from './pages/pinfo/pfrom';
 import ProjectFrom from './pages/pinfo/projectfrom';
+import Homepage from './pages/homepage'
 const BasicRoute = () => (
     <BrowserRouter>
         <Switch>
+            <Route path="/homepage" component={Homepage} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <Route path="/detail" component={Details} />

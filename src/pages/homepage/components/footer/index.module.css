@@ -1,0 +1,36 @@
+.container{
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+}
+.head{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.head > span{
+    font-size: 16px;
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+.head > h1{
+    font-size: 36px
+}
+
+.foot{
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-around;
+    width: 75%;
+}
+.text{
+    width: 450px;
+    padding-right: 50px;
+    padding-bottom: 50px;
+}
+.text> div{
+    color: #6c757d 
+}
