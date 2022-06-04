@@ -91,7 +91,7 @@ const NormalLoginForm = () => {
         <Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button" >登录
           </Button>
-          还没有账号？ <Link to="/register">去注册</Link> or <Link to="/"><span >暂不注册?</span></Link>
+          还没有账号？ <Link to="/register">去注册</Link> or <Link to="/homepage"><span >暂不注册?</span></Link>
           
          
         </Form.Item>
