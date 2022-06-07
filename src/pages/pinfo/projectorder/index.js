@@ -61,25 +61,6 @@ const ProjectFrom = (props) => {
                     </div>
                 )
             }
-            /* render: (text,record)=>{
-                return (
-                    <div>
-                      <a onClick={() => handleNameClick(record.name)}>查看</a>
-                    
-                      <Divider type="vertical" />
-            
-                      <Popconfirm
-                        title="确认是否删除"
-                        placement="topRight"
-                        onConfirm={() => handleNameClick(record.id)}
-                        okText="确认"
-                        cancelText="取消"
-                      >
-                        <a>删除</a>
-                      </Popconfirm>
-                    </div>
-                  );
-            } */
         },
         
     ];
@@ -102,7 +83,8 @@ const ProjectFrom = (props) => {
     }, [])
 
     return (
-        <div className='projectfrom-form'>
+        <div >
+             <div className='topText12'>管理订单</div>
             <Table 
             columns={columns} 
             dataSource={testdata} 
