@@ -43,17 +43,12 @@ const ArticleManger = (props) => {
   const [title, setTitle] = useState(''); // Modal的标题
   const roleno = props.roleno;
 
-  //因为每次都渲染了一次，让他们重新回到了初始值？
-  // var date1_hou = '';
-  // var xulie = [];
-  // var wheatherSearch = false;
-  // var tableObj = {};
   useEffect(() => {
     getList({ classId: 10 });
   }, [wheatherReset]);
 
   //点击审核
-  const handleVerify = (code) => {
+  const handleDelete = (code) => {
     var params = { id: code };
     api.articleInfo(params).then((res) => {
       setJson(res.data.data);
@@ -64,27 +59,22 @@ const ArticleManger = (props) => {
 
   //判断角色设置是否能够审核
   const judgeRole = (record) => {
-    if (
-      roleno === 'sklAdminRole' ||
-      roleno === 'sklPlanningReviewerRole' ||
-      roleno === 'sklSocialReviewerRole' ||
-      roleno === 'sklCompanyReviewerRole' ||
-      roleno === 'supperAdminRole'
-    ) {
       return (
         <div>
-          <a onClick={() => handleVerify(record.id)}>审核</a>
+          <a onClick={() => handleEdit(record.id)}>编辑</a>
           <Divider type="vertical" />
-          <a onClick={() => handleEdit(record.id)}>编辑</a>
+          <Popconfirm
+          placement="bottomLeft"
+          title={'确定删除？'}
+          onConfirm={() => toDelete(record.id)}
+          okText="确定"
+          cancelText="取消"
+        >
+          <a >删除</a>
+        </Popconfirm>
+          
         </div>
       );
-    } else {
-      return (
-        <div>
-          <a onClick={() => handleEdit(record.id)}>编辑</a>
-        </div>
-      );
-    }
   };
 
   //获取list
@@ -130,44 +120,9 @@ const ArticleManger = (props) => {
 
   //新建文章
   const handleAdd = () => {
-    setTitle('新建文章');
+    setTitle('新建收货地址');
     setJson({});
     setVisible(true);
-  };
-
-  //表格查询按钮
-  const handleSubmit = () => {
-    form.validateFields().then((fieldsValue) => {
-      //输出表单对象
-      wheatherSearch = true;
-      //对象重构
-      if (!(date1_hou.endTime === '' || date1_hou.startTime === '')) {
-        fieldsValue = Object.assign(fieldsValue, date1_hou);
-      }
-
-      tableObj = Object.assign({}, fieldsValue); //克隆对象
-      if (fieldsValue.classId) {
-        fieldsValue = Object.assign(fieldsValue, { rows: rows, page: 1 });
-      } else {
-        fieldsValue = Object.assign(fieldsValue, { rows: rows, page: 1, classId: 10 });
-      }
-      //提交代码查询
-      getList(fieldsValue);
-    });
-  };
-
-  //输入日期结束
-  const handleChange = (value, dateString) => {
-    //更新date_hou值
-    date1_hou = { startTime: dateString[0], endTime: dateString[1] };
-  };
-
-  //重置表单
-  const reset = () => {
-    form.resetFields();
-    tableObj = {};
-    wheatherSearch = false;
-    setWheatherReset(wheatherReset + 1);
   };
 
   //这边是编辑
@@ -175,80 +130,43 @@ const ArticleManger = (props) => {
     var params = { id: code };
     api.articleInfo(params).then((res) => {
       setJson(res.data.data);
-      setTitle('编辑文章');
+      setTitle('编辑收货地址');
       setVisible(true);
     });
   };
-  //这边是看详情
-  const handleDetail = (id) => {
-    api.detailList({ id }).then((res) => {
-      const { data } = res.data;
-      let list = [
-        { name: '立项申请主题', value: data.topic },
-        {
-          name: '申请起至日期',
-          value: `${data.startTime && data.startTime.slice(0, 10)}至${data.endTime &&
-            data.endTime.slice(0, 10)}`
-        },
-        { name: '申请类型', value: data.template },
-        { name: '指标要求', value: data.requireContent },
-        {
-          name: '状态',
-          value: data.enableState === 0 ? '关闭' : data.enableState === 1 ? '开放' : ''
-        }
-      ];
-      setDetailList(list);
-      setTitle('编辑立项申请');
-      setDetailVisible(true);
-    });
-  };
+
   const columns = [
     {
-      title: '文章标题',
-      dataIndex: 'title',
-      key: 'title'
+      title: '收获人',
+      dataIndex: 'name',
+      key: 'name'
     },
     {
-      title: '文章分类',
-      dataIndex: 'className',
-      key: 'className'
-      //   render: (text, record) => {
-      //     return (
-      //       <span>
-      //         {record.startTime && record.startTime.slice(0, 10)}至
-      //         {record.endTime && record.endTime.slice(0, 10)}
-      //       </span>
-      //     );
-      //   }
+      title: '所在地区',
+      dataIndex: 'city',
+      key: 'city'
+
     },
     {
-      title: '访问量',
-      dataIndex: 'hits',
-      key: 'hits'
+      title: '详细地址',
+      dataIndex: 'address',
+      key: 'address'
     },
     {
-      title: '审核进度',
-      dataIndex: 'articleStatus',
-      key: 'articleStatus',
-      render: (text) => <span>{text === 0 ? '待审核' : text === 1 ? '审核不通过' : '已发布'}</span>
+      title: '邮政编码',
+      dataIndex: 'code',
+      key: 'code',
     },
     {
-      title: '提交日期',
-      dataIndex: 'createTime',
-      key: 'createTime'
+      title: '联系方式',
+      dataIndex: 'callNumber',
+      key: 'callNumber'
       //   render: (text) => <span>{text === 0 ? '关闭' : text === 1 ? '开放' : ''}</span>
     },
     {
-      title: '发布时间',
-      dataIndex: 'endTime',
-      key: 'endTime',
-      render: (text) => <span>{text ? text.slice(0, 10) : ''}</span>
-    },
-    {
-      title: '审核日期',
-      dataIndex: 'auditTime',
-      key: 'auditTime'
-      //   render: (text) => <span>{text === 0 ? '关闭' : text === 1 ? '开放' : ''}</span>
+      title: '邮箱',
+      dataIndex: 'email',
+      key: 'email',
     },
     {
       title: '操作',
@@ -293,90 +211,9 @@ const ArticleManger = (props) => {
     <div className="admin-container">
       <div className="function-btns">
         {/* <div className="button"> */}
-        <Popconfirm
-          placement="bottomLeft"
-          title={'确定删除？'}
-          onConfirm={() => toDelete()}
-          okText="确定"
-          cancelText="取消"
-        >
-          <Button style={{ backgroundColor: '#dbd6d6', marginRight: '10px' }}>删除</Button>
-        </Popconfirm>
         <Button type="primary" style={{ marginRight: '10px' }} onClick={handleAdd}>
           新建
         </Button>
-        <Button onClick={reset} style={{ marginRight: '10px' }}>
-          重置
-        </Button>
-        <Button
-          type="primary"
-          htmlType="submit"
-          style={{ marginRight: '10px' }}
-          onClick={handleSubmit}
-        >
-          查询
-        </Button>
-
-        {/* </div> */}
-        <div className="function-list">
-          <Form
-            id="Form-chaxun"
-            form={form}
-            labelAlign="left"
-            layout="inline"
-            onFinish={handleSubmit}
-          >
-            <Row gutter={8}>
-              <Col key="0" className="gutter-row" span={5}>
-                <Form.Item label="文章标题" name="title">
-                  <Input placeholder="请输入" maxLength="10" />
-                </Form.Item>
-              </Col>
-              <Col key="0" className="gutter-row" span={6}>
-                <Form.Item label="文章分类：" name="classId">
-                  <TreeSelect
-                    showSearch
-                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                    placeholder="请选择"
-                    allowClear
-                    treeDefaultExpandAll
-                    // onChange={onChange}
-                  >
-                    <TreeNode value={10} title="社团建设" disabled="true">
-                      <TreeNode value={117} title="管理办法" />
-                      <TreeNode value={67} title="社团管理" />
-                      <TreeNode value={66} title="社团组织" disabled="true" />
-                      <TreeNode value={68} title="社团动态" />
-                    </TreeNode>
-                  </TreeSelect>
-                </Form.Item>
-              </Col>
-              <Col key="0" className="gutter-row" span={5}>
-                <Form.Item label="审核进度：" name="articleStatus">
-                  <TreeSelect
-                    showSearch
-                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                    placeholder="请选择"
-                    allowClear
-                    treeDefaultExpandAll
-                    // onChange={onChange}
-                  >
-                    <TreeNode value={0} title="待审核" />
-                    <TreeNode value={1} title="审核不通过" />
-                    <TreeNode value={2} title="已发布" />
-                  </TreeSelect>
-                </Form.Item>
-              </Col>
-              <Col key="0" className="gutter-row" span={8}>
-                <Form.Item label="提交日期：" name="createTime">
-                  <Space direction="vertical">
-                    <RangePicker onChange={handleChange} />
-                  </Space>
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </div>
       </div>
 
       <div className="admin-table-pagination" ref={table}>
@@ -409,7 +246,6 @@ const ArticleManger = (props) => {
         closable={false}
         centered={true}
         wrapClassName="admin-modal"
-        width={'1000px'}
       >
         <AddDoor
           title={title}

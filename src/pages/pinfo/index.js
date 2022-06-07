@@ -30,6 +30,10 @@ function Pinfo(props) {
     function handleClick5() {
         props.history.push("/pinfo/authentication");
     }
+    function handleClick6() {
+        props.history.push("/pinfo/pDoor");
+    }
+
 
     //检测是否已登录，如果没登录就爆出消息去登录
     useEffect(() => {
@@ -61,8 +65,8 @@ function Pinfo(props) {
                                     <Menu.Item key="3" onClick={handleClick2} >
                                         项目管理 
                                     </Menu.Item>
-                                    <Menu.Item key="4" >
-                                        财富中心
+                                    <Menu.Item key="4"  onClick={handleClick6}>
+                                        收货地址
                                     </Menu.Item>
                                     <Menu.Item key="5" onClick={handleClick5}>
                                         账号认证
