@@ -10,6 +10,7 @@ import './index.css'
 import Pfrom from './pfrom';
 import ProjectFrom from './projectfrom';
 import ProjectOrder from './projectorder'
+import Authentication from './authentication'
 
 const { Header, Content, Footer } = Layout;
 
@@ -24,6 +25,9 @@ function Pinfo(props) {
     function handleClick3() {
         // props.history.push("/home");
         props.history.push("/pinfo/porder");
+    }
+    function handleClick5() {
+        props.history.push("/pinfo/authentication");
     }
 
     //检测是否已登录，如果没登录就爆出消息去登录
@@ -59,8 +63,8 @@ function Pinfo(props) {
                                     <Menu.Item key="4" >
                                         财富中心
                                     </Menu.Item>
-                                    <Menu.Item key="5" >
-                                        消息中心
+                                    <Menu.Item key="5" onClick={handleClick5}>
+                                        账号认证
                                     </Menu.Item>
                                 </Menu>
                             </div>
@@ -70,7 +74,8 @@ function Pinfo(props) {
                                 <Switch>
                                     <Route path="/pinfo/pfrom" component={Pfrom}/>
                                     <Route path="/pinfo/projectfrom" component={ProjectFrom}/>
-                                    <Route path="/pinfo/porder" component={ProjectOrder}/>
+                                    <Route path="/pinfo/porder" component={ProjectOrder} />
+                                    <Route path="/pinfo/authentication" component={Authentication} />
                                     <Redirect to="/pinfo/pfrom" />
                                 </Switch>
                             </div>

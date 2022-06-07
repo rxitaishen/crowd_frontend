@@ -9,6 +9,15 @@ import { useEffect, useState } from 'react';
 const ProjectFrom = (props) => {
     const [data, setData] = useState([]);
 
+    const testdata = [
+        {
+            address: '1',
+            paper: '1',
+            paperTime: '1',
+            paperState:'6'
+        }
+    ]
+
     const handleNameClick = (name) => {
         axios.get(`/api/projects/view/${name}`).then((res)=>{
             axios.get(`/api/projects/detail/${name}`).then((res)=>{
@@ -19,28 +28,40 @@ const ProjectFrom = (props) => {
 
     const columns = [
         {
-            title: '项目名称',
-            dataIndex: 'name',
-            key: 'name',
+            title: '收货地址',
+            dataIndex: 'address',
+            key: 'address',
         },
         {
-            title: '投资金额',
-            dataIndex: 'moneyHave',
-            key: 'moneyHave',
+            title: '下单项目',
+            dataIndex: 'paper',
+            key: 'paper',
         },
         {
-            title: '项目状态',
-            dataIndex: 'moneyTarget',
-            key: 'moneyTarget',
-            render: (text,record)=>{
+            title: '下单时间',
+            dataIndex: 'paperTime',
+            key: 'paperTime',
+            /* render: (text,record)=>{
                 return record.moneyHave >= record.moneyTarget ? '众筹完成' : '正在众筹'
-            }
+            } */
         },
         {
-            title: '操作',
-            dataIndex: 'moneyTarget',
-            key: 'moneyTarget',
-            render: (text,record)=>{
+            title: '状态',
+            dataIndex: 'paperState',
+            key: 'paperState',
+            render: (text,record) => { 
+                return (
+                    <div>
+                        {record.paperState == 1 && <p>待付款</p>}
+                        {record.paperState == 2 && <p>已付款</p>}
+                        {record.paperState == 3 && <p>代发货</p>}
+                        {record.paperState == 4 && <p>待收货</p>}
+                        {record.paperState == 5 && <p>已完成</p>}
+                        {record.paperState == 6 && <p>已取消</p>}
+                    </div>
+                )
+            }
+            /* render: (text,record)=>{
                 return (
                     <div>
                       <a onClick={() => handleNameClick(record.name)}>查看</a>
@@ -58,7 +79,7 @@ const ProjectFrom = (props) => {
                       </Popconfirm>
                     </div>
                   );
-            }
+            } */
         },
         
     ];
@@ -84,7 +105,7 @@ const ProjectFrom = (props) => {
         <div className='projectfrom-form'>
             <Table 
             columns={columns} 
-            dataSource={data} 
+            dataSource={testdata} 
             scroll={{
                 y:'1000px'
             }} 
