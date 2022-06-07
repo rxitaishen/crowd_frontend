@@ -1,7 +1,7 @@
 
 import './index.css';
 import { useState, useEffect,useRef  } from 'react'
-import { Layout, Progress, InputNumber, Modal } from 'antd';
+import { Layout, Progress, InputNumber, Modal, message } from 'antd';
 import store from '../../redux/store'
 import HeaderMenu from '../../components/header';
 import axios from 'axios'
@@ -59,6 +59,17 @@ function Detail(props) {
     }
     else {
       showModal()
+    }
+  }
+
+  const handleBuy = () => {
+    if (!store.getState() ) {
+      console.log('未登录')
+      alert('未登录，请先登录')
+      props.history.push('/login')
+    }
+    else {
+      message.success('下单成功')
     }
   }
 
@@ -128,6 +139,7 @@ function Detail(props) {
               </div>
               <div id='suport-rightnow-div'>
                 <a id='suport-rightnow' onClick={handleSuport}>立即支持</a>
+                <a id='suport-rightnow' onClick={handleBuy}>立即下单</a>
                 <Modal title="请输入支持金额" width={300} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                   <div className='modalnum'> 
                   支持 <InputNumber ref={model}  onChange={onChange} /> 元

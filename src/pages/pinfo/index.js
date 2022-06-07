@@ -60,7 +60,7 @@ function Pinfo(props) {
                                         个人设置
                                     </Menu.Item>
                                     <Menu.Item key="2" onClick={handleClick3} >
-                                        订单管理
+                                        订单信息
                                     </Menu.Item>
                                     <Menu.Item key="3" onClick={handleClick2} >
                                         项目管理 

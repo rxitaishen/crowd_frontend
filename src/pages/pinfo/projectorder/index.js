@@ -84,7 +84,7 @@ const ProjectFrom = (props) => {
 
     return (
         <div >
-             <div className='topText12'>管理订单</div>
+             <div className='topText12'>查看订单</div>
             <Table 
             columns={columns} 
             dataSource={testdata} 
