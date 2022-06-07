@@ -62,8 +62,6 @@ const Listli = (props) => {
                 props.history.push({pathname:'/detail', query:{data_ori:res.data}})
             })
         })
-        
-
     }
 
    

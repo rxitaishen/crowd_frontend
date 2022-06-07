@@ -63,7 +63,7 @@ const Pfrom = (props) => {
                 </Form.Item>
 
                 <Form.Item
-                    label="邮箱"
+                    label="自我介绍"
                     name="email"
                     
                 >

@@ -32,7 +32,8 @@ function Detail(props) {
     if (store){
       console.log('支持成功');
       let sNum = parseInt(model.current.value);
-      let obj = {name:name,num:sNum}
+      let obj = {name:name, num:sNum, userName:store.getState()}
+
       axios.post(`/api/projects/suport`,obj).then((res)=>{
         let mHave =res.data
         console.log('返回的参数为',mHave);
@@ -57,7 +58,6 @@ function Detail(props) {
       props.history.push('/login')
     }
     else {
-      
       showModal()
     }
   }
@@ -105,7 +105,7 @@ function Detail(props) {
                 <span>{name}</span>
               </div>
               <div className='imgdiv'>
-                <img src={img[0]} style={{ width: '100%', height: '290px' }} />
+                <img alt='哎呀好像忘记上传了呢' src={img[0]} style={{ width: '100%', height: '290px' }} />
               </div>
             </div>
             <div className='content-upright'>

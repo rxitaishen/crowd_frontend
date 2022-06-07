@@ -15,7 +15,7 @@ import Homepage from './pages/homepage'
 const BasicRoute = () => (
     <BrowserRouter>
         <Switch>
-            <Route path="/homepage" component={Homepage} />
+            <Route path="/homepage" component={App} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <Route path="/detail" component={Details} />
@@ -24,7 +24,7 @@ const BasicRoute = () => (
             <Route path="/sortPage" component={SortPage} />
             <Route path="/completepage" component={Completepage} />
             <Route path="/pinfo" component={Pinfo}/>
-            <Route path="/" component={App} />
+            <Route path="/" component={Homepage} />
 
         </Switch>
     </BrowserRouter>

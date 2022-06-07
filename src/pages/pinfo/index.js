@@ -9,6 +9,7 @@ import { withRouter,Router, Link,Route, Redirect, Switch } from 'react-router-do
 import './index.css'
 import Pfrom from './pfrom';
 import ProjectFrom from './projectfrom';
+import ProjectOrder from './projectorder'
 
 const { Header, Content, Footer } = Layout;
 
@@ -21,7 +22,8 @@ function Pinfo(props) {
         props.history.push("/pinfo/projectfrom");
     }
     function handleClick3() {
-        props.history.push("/home");
+        // props.history.push("/home");
+        props.history.push("/pinfo/porder");
     }
 
     //检测是否已登录，如果没登录就爆出消息去登录
@@ -46,13 +48,13 @@ function Pinfo(props) {
                                     mode="inline"
                                 >
                                     <Menu.Item key="1" onClick={handleClick1}>
-                                    个人设置
+                                        个人设置
                                     </Menu.Item>
-                                    <Menu.Item key="2" >
+                                    <Menu.Item key="2" onClick={handleClick3} >
                                         订单管理
                                     </Menu.Item>
                                     <Menu.Item key="3" onClick={handleClick2} >
-                                    项目管理 
+                                        项目管理 
                                     </Menu.Item>
                                     <Menu.Item key="4" >
                                         财富中心
@@ -68,7 +70,8 @@ function Pinfo(props) {
                                 <Switch>
                                     <Route path="/pinfo/pfrom" component={Pfrom}/>
                                     <Route path="/pinfo/projectfrom" component={ProjectFrom}/>
-                                    <Redirect to="/pinfo/pfrom"/>
+                                    <Route path="/pinfo/porder" component={ProjectOrder}/>
+                                    <Redirect to="/pinfo/pfrom" />
                                 </Switch>
                             </div>
                         </Col>

@@ -26,7 +26,7 @@ const NormalLoginForm = () => {
               alert("登录失败，请注册")
           }
       }
-  )    
+    )    
   };
 
   return (
