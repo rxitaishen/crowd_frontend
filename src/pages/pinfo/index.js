@@ -9,7 +9,9 @@ import { withRouter,Router, Link,Route, Redirect, Switch } from 'react-router-do
 import './index.css'
 import Pfrom from './pfrom';
 import ProjectFrom from './projectfrom';
-import ProjectOrder from './projectorder'
+import ProjectOrder from './projectorder';
+import Door from './ConstructionManagement';
+
 
 const { Header, Content, Footer } = Layout;
 
@@ -71,6 +73,7 @@ function Pinfo(props) {
                                     <Route path="/pinfo/pfrom" component={Pfrom}/>
                                     <Route path="/pinfo/projectfrom" component={ProjectFrom}/>
                                     <Route path="/pinfo/porder" component={ProjectOrder}/>
+                                    <Route path="/pinfo/pDoor" component={Door}/>
                                     <Redirect to="/pinfo/pfrom" />
                                 </Switch>
                             </div>

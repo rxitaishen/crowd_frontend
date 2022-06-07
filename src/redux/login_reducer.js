@@ -2,7 +2,7 @@
 import {LOGIN,LOGOUT} from './constant'
 import cookie from 'react-cookies'
 
-let initdata = 0 
+let initdata = 123
 
 const countReducer = (preState = initdata,action)=>{
     const {type,data} = action;
