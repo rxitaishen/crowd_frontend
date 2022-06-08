@@ -14,7 +14,7 @@ export default function Authentication() {
                     <p className='top'>个人认证</p>
                     <p className='detail'>个人用户真实身份认证</p>
                 </div>
-                <button >去认证</button>
+                <button id='button' >去认证</button>
             </div>
 
             <div className='card'>
@@ -25,7 +25,7 @@ export default function Authentication() {
                     <p className='top'>企业认证</p>
                     <p className='detail'>合法企业的身份认证</p>
                 </div>
-                <button >去认证</button>
+                <button id='button' >去认证</button>
             </div>
             <div className='card'>
                 <div className='icon'>
@@ -34,7 +34,7 @@ export default function Authentication() {
                     <p className='top'>学生认证</p>
                     <p className='detail'>学生的身份认证</p>
                 </div>
-                <button >去认证</button>
+                <button id='button' >去认证</button>
 
             </div>
         </div>

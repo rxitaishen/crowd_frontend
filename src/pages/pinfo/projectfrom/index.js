@@ -170,10 +170,6 @@ const ProjectFrom = (props) => {
           scroll={{
             y: "350px",
           }}
-          pagination={{
-            howQuickJumper: true,
-            position: ["right"],
-          }}
         />
       </div>
       <Modal

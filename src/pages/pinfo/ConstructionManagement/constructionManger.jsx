@@ -16,123 +16,90 @@ import {
   Select
 } from 'antd';
 import AddDoor from './addConstruction';
-
-import api from '../../../api/admin';
-const { Option, OptGroup } = Select;
-const { TreeNode } = TreeSelect;
-const { RangePicker } = DatePicker;
-var wheatherSearch = false;
-var tableObj = {};
+import store from "../../../redux/store";
+import moment from 'moment'
+import axios from 'axios';
 var date1_hou = '';
-var xulie = [];
 const ArticleManger = (props) => {
   const [form] = Form.useForm();
   const { templateList } = {};
   const table = useRef(null);
   const modalChild = useRef(null);
   const [data, setData] = useState([]);
-  const [page, setPage] = useState(1);
-  const [rows, setRows] = useState(10);
-  const [status, setStatus] = useState(null);
-  const [total, setTotal] = useState(0);
+
   const [visible, setVisible] = useState(false);
-  const [detailVisible, setDetailVisible] = useState(false);
-  const [wheatherReset, setWheatherReset] = useState(1);
-  const [detailList, setDetailList] = useState([]);
-  const [json, setJson] = useState({}); // 存储添加和编辑 详情的数据
+  const [editData, setEditData] = useState({});
   const [title, setTitle] = useState(''); // Modal的标题
-  const roleno = props.roleno;
+
+  const refrash = () => {
+    axios
+    .post(`/api/projects/search/owner`, { owner: store.getState() })
+    .then((res) => {
+      console.log("res=>", res.data);
+      if (res.data !== "未找到相关信息") {
+        setData(res.data);
+      } else {
+        console.log("没有相关信息");
+      }
+    });
+  }
 
   useEffect(() => {
-    getList({ classId: 10 });
-  }, [wheatherReset]);
+    refrash()
+  }, []);
 
-  //点击审核
-  const handleDelete = (code) => {
-    var params = { id: code };
-    api.articleInfo(params).then((res) => {
-      setJson(res.data.data);
-      setTitle('审核文章');
-      setVisible(true);
-    });
-  };
 
-  //判断角色设置是否能够审核
-  const judgeRole = (record) => {
-      return (
-        <div>
-          <a onClick={() => handleEdit(record.id)}>编辑</a>
-          <Divider type="vertical" />
-          <Popconfirm
-          placement="bottomLeft"
-          title={'确定删除？'}
-          onConfirm={() => toDelete(record.id)}
-          okText="确定"
-          cancelText="取消"
-        >
-          <a >删除</a>
-        </Popconfirm>
-          
-        </div>
-      );
-  };
-
-  //获取list
-  const getList = (params) => {
-    api.specialList(params).then((res) => {
-      setData(res.data.data.rows || []);
-      setTotal(res.data.data.total || 0);
-    });
-  };
-
-  //删除
-  const toDelete = () => {
-    xulie = unique(xulie); //去重
-    var params = { ids: xulie };
-
-    api.articlesDelete(params).then((res) => {
-      getList({ classId: 10 });
-      xulie = {};
-    });
-  };
-
-  //列表选择
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      if (xulie) {
-        var c = xulie.concat(selectedRowKeys);
-        xulie = c.slice(0);
-      } else {
-        xulie = selectedRowKeys.slice(0);
+  
+  //提交按钮
+  const handleSubmit = () => {
+    form.validateFields().then(
+      (fieldsValue) => {
+        //输出表单对象
+        console.log('表单对象', fieldsValue);
+        
+        fieldsValue.timeStart = date1_hou || moment(fieldsValue.time[0]).format("YYYY-MM-DD")
+        fieldsValue.timeEnd = date1_hou || moment(fieldsValue.time[1]).format("YYYY-MM-DD")
+        fieldsValue.time = undefined;
+        const param = {...fieldsValue, _id: editData._id };
+        console.log('param: ', param._id);
+        axios.post(`/api/projects/edit`, param).then(res => {
+          console.log('res=>', res.data);
+          if (res.data == "访问成功") {
+            setVisible(false);
+            date1_hou = '';
+            refrash();
+            message.success("访问成功")
+          }
+          else if (res.data == "访问失败") {
+            setVisible(false);
+            message.error("访问失败")
+          }
+        })
       }
-      // xulie.push.apply(xulie, selectedRowKeys);
-    }
+    );
   };
-  //数组去重
-  function unique(arr) {
-    return Array.from(new Set(arr));
-  }
-  //设置查询时的分类
-  // const handleStatus = (value) => {
-  //   setStatus(value);
-  //   getList({ page: 1, rows, enableState: value });
-  // };
 
   //新建文章
   const handleAdd = () => {
     setTitle('新建收货地址');
-    setJson({});
+    setEditData({});
     setVisible(true);
   };
 
   //这边是编辑
-  const handleEdit = (code) => {
-    var params = { id: code };
-    api.articleInfo(params).then((res) => {
-      setJson(res.data.data);
-      setTitle('编辑收货地址');
-      setVisible(true);
-    });
+  const handleEditClick = (name) => {
+    axios.post(`/api/projects/search/name`, {proName: name}).then((res) => {
+        console.log('编辑项目',res.data);
+        setEditData(res.data);
+        setVisible(true)
+    })    
+  };
+
+  const handleDeleteClick = (id) => {
+    axios.delete(`/api/receive/${id}`).then((res) => {
+        console.log('删除项目', res);
+        refrash()
+    })
   };
 
   const columns = [
@@ -172,22 +139,26 @@ const ArticleManger = (props) => {
       title: '操作',
       dataIndex: 'operate',
       render: (text, record) => {
-        return judgeRole(record);
-      }
+        return (
+          <div>
+            <a onClick={() => handleEditClick(record.name)}>编辑</a>
+
+            <Divider type="vertical" />
+
+            <Popconfirm
+              title="确认是否删除"
+              placement="topRight"
+              onConfirm={() => handleDeleteClick(record._id)}
+              okText="确认"
+              cancelText="取消"
+            >
+              <a>删除</a>
+            </Popconfirm>
+          </div>
+        );
+      },
     }
   ];
-  const pageRowsChange = (page, rows) => {
-    // handleSubmit();
-    setPage(page);
-    setRows(rows);
-    if (wheatherSearch) {
-      var tableObj_ForPage = tableObj;
-      tableObj_ForPage = Object.assign(tableObj_ForPage, { rows: rows, page: page });
-      getList(tableObj_ForPage);
-    } else {
-      getList({ page, rows });
-    }
-  };
 
   //模态框的点击事件，从子组件那边用react的一个hook传过来了
   const handleOk = () => {
@@ -199,14 +170,6 @@ const ArticleManger = (props) => {
     setVisible(false);
   };
 
-  //重新获取数据
-  const againQuery = () => {
-    getList({ classId: 10 });
-    setVisible(false);
-  };
-  //&& 如果左边的表达式可以转换为ture，则计算右边表达式，并返回右边表达式的值
-  const scrollY = table.current && table.current.offsetHeight - 120;
-  // const scrollY = 170;
   return (
     <div className="admin-container">
       <div className="function-btns">
@@ -220,20 +183,9 @@ const ArticleManger = (props) => {
         <Table
           columns={columns}
           dataSource={data}
-          rowSelection={rowSelection}
           rowKey={(record) => record.id}
-          scroll={{ y: scrollY }}
-          pagination={{
-            current: page,
-            pageSize: rows,
-            total: total,
-            pageSizeOptions: ['10', '30', '50', '100'],
-            showSizeChanger: true,
-            onShowSizeChange: pageRowsChange,
-            showTotal: (total) => `共${total}条`,
-            showQuickJumper: true,
-            onChange: pageRowsChange
-          }}
+          scroll={{ y: "350px",}}
+          
         />
       </div>
       {/* 新增 */}
@@ -247,14 +199,78 @@ const ArticleManger = (props) => {
         centered={true}
         wrapClassName="admin-modal"
       >
-        <AddDoor
+        {/* <AddDoor
           title={title}
           data={json}
           templateList={templateList}
           ref={modalChild}
           againQuery={againQuery}
           role={roleno}
-        />
+        /> */}
+        <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFinish={handleSubmit} form={form}>
+          <Form.Item
+            label="收货人姓名"
+            name="name"
+            rules={[{ required: true, message: '请填写收货人姓名' }]}
+            initialValue={data.name}
+          >
+            <Input placeholder="请输入" />
+          </Form.Item>
+          <Form.Item
+            label="联系方式"
+            name="callNumber"
+            rules={[
+              { required: true, message: '请输入联系方式' },
+            ]}
+            initialValue={data.callNumber}
+          >
+            <Input placeholder="请输入" />
+          </Form.Item>
+
+          <Form.Item
+            label="电子邮箱"
+            name="email"
+            rules={[
+              { required: true, message: '请输入电子邮箱' },
+            ]}
+            initialValue={data.email}
+          >
+            <Input placeholder="请输入" />
+          </Form.Item>
+
+          <Form.Item
+            label="所在城市"
+            name="city"
+            rules={[
+              { required: true, message: '请输入所在城市' },
+            ]}
+            initialValue={data.city}
+          >
+            <Input placeholder="请输入" />
+          </Form.Item>
+
+          <Form.Item
+            label="详细地址"
+            name="address"
+            rules={[
+              { required: true, message: '请输入详细地址' },
+            ]}
+            initialValue={data.address}
+          >
+            <Input placeholder="请输入" />
+          </Form.Item>
+
+          <Form.Item
+            label="邮政编码"
+            name="code"
+            rules={[
+              { required: true, message: '请输入邮政编码' },
+            ]}
+            initialValue={data.code}
+          >
+            <Input placeholder="请输入" />
+          </Form.Item>
+      </Form>
       </Modal>
     </div>
   );
