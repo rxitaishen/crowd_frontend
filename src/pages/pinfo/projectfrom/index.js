@@ -1,33 +1,21 @@
-import { Divider, Table, Popconfirm, Modal, Form, Input, DatePicker, Upload, Button } from "antd";
+import { Divider, Table, Popconfirm, Modal, Form, Input, DatePicker, Upload, Button, message } from "antd";
 import "./index.css";
 import axios from "axios";
 import store from "../../../redux/store";
 import { useEffect, useState, useRef } from "react";
 import { InboxOutlined } from '@ant-design/icons';
+import moment from 'moment'
 
 const { RangePicker } = DatePicker;
 
 const ProjectFrom = (props) => {
   const [data, setData] = useState([]);
-  const title = '编辑项目'
+  const title = '编辑项目';
+  const [editData, setEditData] = useState({});
   const [visible, setVisible] = useState(false);
   const modalChild = useRef(null);
-  const [verifyCode, setverifyCode] = useState(''); //设置验证码，不设置state的话会导致验证码不改变，为初始值？
-  var tempObj = new FormData(); //用于上传文件的formdata数据格式
-  var fileArray = [];
+
   var date1_hou = '';
-
-  const testdata = [
-    {
-      name:'1',
-      moneyHave:'1',
-      moneyTarget:'1',
-      moneyTarget:'1'
-
-
-    }
-  ]
-
 
   const [form] = Form.useForm();
 
@@ -46,50 +34,30 @@ const ProjectFrom = (props) => {
     form.validateFields().then(
       (fieldsValue) => {
         //输出表单对象
-        console.log('verifyCode', verifyCode);
         console.log('表单对象', fieldsValue);
-
-        //将表单数据写入formdata对象中
-        for (var key in fieldsValue) {
-          if (key != 'indexImage' || key != 'time') {
-            var value = eval(`fieldsValue.${key}`); //eval函数执行字符串代码
-            tempObj.append(key, value);
-          }
-          else {
-            continue
-          }
-        }
-        //加入文件流
-        if (Object.keys(fileArray).length != 0) {
-          for (let i = 0; i < fileArray.length; i++) {
-            tempObj.append('file', fileArray[i]);
-          }
-        }
-        tempObj.append('timeStart', date1_hou.startTime);
-        tempObj.append('timeEnd', date1_hou.endTime);
-        fileArray = [];
-        axios.post(`/api/projects/addproject`, tempObj).then(res => {
+        
+        fieldsValue.timeStart = date1_hou || moment(fieldsValue.time[0]).format("YYYY-MM-DD")
+        fieldsValue.timeEnd = date1_hou || moment(fieldsValue.time[1]).format("YYYY-MM-DD")
+        fieldsValue.time = undefined;
+        const param = {...fieldsValue, _id: editData._id };
+        console.log('param: ', param._id);
+        axios.post(`/api/projects/edit`, param).then(res => {
           console.log('res=>', res.data);
-          if (res.data == "添加成功") {
-            alert("添加成功")
+          if (res.data == "访问成功") {
+            setVisible(false);
+            date1_hou = '';
+            refrash();
+            message.success("访问成功")
           }
-          else if (res.data == "添加失败") {
-            alert("添加失败")
+          else if (res.data == "访问失败") {
+            setVisible(false);
+            message.error("访问失败")
           }
         })
-        //重置表单
-        reset();
       }
-      // console.log(fileList);
     );
   };
-  const { Dragger } = Upload;
 
-  //重置表单
-  const reset = () => {
-    form.resetFields();
-    console.log('表单已重置');
-  };
 
   //输入日期结束
   const handleChange = (value, dateString) => {
@@ -110,27 +78,18 @@ const ProjectFrom = (props) => {
   };
 
   const handleEditClick = (name) => {
-    axios.get(`/api/projects/view/${name}`).then((res) => {
-      axios.get(`/api/projects/detail/${name}`).then((res) => {
-        props.history.push({
-          pathname: "/detail",
-          query: { data_ori: res.data },
-        });
-      });
-    });
-    
-    setVisible(true)
+    axios.post(`/api/projects/search/name`, {proName: name}).then((res) => {
+        console.log('编辑项目',res.data);
+        setEditData(res.data);
+        setVisible(true)
+    })    
   };
 
   const handleDeleteClick = (name) => {
-    axios.get(`/api/projects/view/${name}`).then((res) => {
-      axios.get(`/api/projects/detail/${name}`).then((res) => {
-        props.history.push({
-          pathname: "/detail",
-          query: { data_ori: res.data },
-        });
-      });
-    });
+    axios.delete(`/api/projects/${name}`).then((res) => {
+        console.log('删除项目', res);
+        refrash()
+    })
   };
 
   const columns = [
@@ -170,7 +129,7 @@ const ProjectFrom = (props) => {
             <Popconfirm
               title="确认是否删除"
               placement="topRight"
-              onConfirm={() => handleDeleteClick(record.id)}
+              onConfirm={() => handleDeleteClick(record.name)}
               okText="确认"
               cancelText="取消"
             >
@@ -182,18 +141,22 @@ const ProjectFrom = (props) => {
     },
   ];
 
+  const refrash = () => {
+    axios
+    .post(`/api/projects/search/owner`, { owner: store.getState() })
+    .then((res) => {
+      console.log("res=>", res.data);
+      if (res.data !== "未找到相关信息") {
+        setData(res.data);
+      } else {
+        console.log("没有相关信息");
+      }
+    });
+  }
+
   useEffect(() => {
     console.log("store.getState(): ", store.getState());
-    axios
-      .post(`/api/projects/search/owner`, { owner: store.getState() })
-      .then((res) => {
-        console.log("res=>", res.data);
-        if (res.data !== "未找到相关信息") {
-          setData(res.data);
-        } else {
-          console.log("没有相关信息");
-        }
-      });
+    refrash();
   }, []);
 
   return (
@@ -202,9 +165,10 @@ const ProjectFrom = (props) => {
         <div className="topText12">管理项目</div>
         <Table
           columns={columns}
-          dataSource={testdata}
+          dataSource={data}
+          
           scroll={{
-            y: "1000px",
+            y: "350px",
           }}
           pagination={{
             howQuickJumper: true,
@@ -224,6 +188,7 @@ const ProjectFrom = (props) => {
       >
         <Form
           form={form}
+          ref={modalChild}
           labelCol={{
             span: 8,
           }}
@@ -241,6 +206,7 @@ const ProjectFrom = (props) => {
                 message: '请输入'
               }
             ]}
+            initialValue={editData.name}
           >
             <Input placeholder="请输入" style={{ width: '212px' }} maxLength="10" />
           </Form.Item>
@@ -253,6 +219,7 @@ const ProjectFrom = (props) => {
                 message: '请输入'
               }
             ]}
+            initialValue={editData.moneyTarget}
           >
             <Input placeholder="请输入" style={{ width: '212px' }} maxLength="10" />
           </Form.Item>
@@ -265,7 +232,7 @@ const ProjectFrom = (props) => {
                 message: '请输入'
               }
             ]}
-            initialValue={store.getState()}
+            initialValue={editData.owner}
           >
             <Input placeholder="请输入" style={{ width: '212px' }} maxLength="10" />
           </Form.Item>
@@ -278,6 +245,7 @@ const ProjectFrom = (props) => {
                 message: '请输入'
               }
             ]}
+            initialValue={[moment(editData.timeStart,'YYYY-MM-DD'), moment(editData.timeEnd,'YYYY-MM-DD')]}
           >
             {/* <Space direction="vertical"> */}
             <RangePicker style={{ width: '300px' }} onChange={handleChange} />
@@ -292,30 +260,10 @@ const ProjectFrom = (props) => {
                 message: '请输入'
               }
             ]}
+            initialValue={editData.description}
           >
-            <Input.TextArea rows={5} style={{ width: '300px' }} showCount maxLength={100} />
+            <Input.TextArea rows={5}  style={{ width: '300px' }} showCount maxLength={100} />
           </Form.Item>
-          {/* <Form.Item
-              label="南宋研究简介"
-              name="content"
-              // initialValue={BraftEditor.createEditorState(data.baseFunc)}
-              rules={[{ required: true, message: '请输入正文' }]}
-              >
-              <BraftEditor style={{ width: '350px' ,height:'400px'}} />
-              </Form.Item> */}
-          {/* <Form.Item
-            label="上传封面"
-            name="indexImage"
-
-          >
-            <span style={{ color: 'red' }}>注意！</span>上传的第一张图将作为封面
-            <Dragger {...props} style={{ width: '300px' }}>
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">点击或拖拽上传文件</p>
-            </Dragger>
-          </Form.Item> */}
 
           {/* <Form.Item>
             <Button type="primary" htmlType="submit" style={{ marginLeft: '228px' }}>

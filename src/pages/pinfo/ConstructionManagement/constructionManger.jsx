@@ -137,7 +137,7 @@ const ArticleManger = (props) => {
 
   const columns = [
     {
-      title: '收获人',
+      title: '收货人',
       dataIndex: 'name',
       key: 'name'
     },

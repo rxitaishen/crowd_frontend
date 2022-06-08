@@ -34,13 +34,13 @@ const ProjectFrom = (props) => {
         },
         {
             title: '下单项目',
-            dataIndex: 'paper',
-            key: 'paper',
+            dataIndex: 'proName',
+            key: 'proName',
         },
         {
             title: '下单时间',
-            dataIndex: 'paperTime',
-            key: 'paperTime',
+            dataIndex: 'buyTime',
+            key: 'buyTime',
             /* render: (text,record)=>{
                 return record.moneyHave >= record.moneyTarget ? '众筹完成' : '正在众筹'
             } */
@@ -52,12 +52,11 @@ const ProjectFrom = (props) => {
             render: (text,record) => { 
                 return (
                     <div>
-                        {record.paperState == 1 && <p>待付款</p>}
-                        {record.paperState == 2 && <p>已付款</p>}
-                        {record.paperState == 3 && <p>代发货</p>}
-                        {record.paperState == 4 && <p>待收货</p>}
-                        {record.paperState == 5 && <p>已完成</p>}
-                        {record.paperState == 6 && <p>已取消</p>}
+                        {record.paperState === 1 && <p>待付款</p>}
+                        {record.paperState === 2 && <p>待发货</p>}
+                        {record.paperState === 3 && <p>待收货</p>}
+                        {record.paperState === 4 && <p>已完成</p>}
+                        {record.paperState === 5 && <p>已取消</p>}
                     </div>
                 )
             }
@@ -65,11 +64,8 @@ const ProjectFrom = (props) => {
         
     ];
 
-
-    useEffect(() => {
-        console.log('store.getState(): ', store.getState());
-        // TODO: 新增接口
-        axios.post(`/api/projects/searchOrder/owner`,{owner: store.getState()}).then(
+    const reflash = () => {
+        axios.get(`/api/projects/buyRecord/${store.getState()}`).then(
             res=>{
                 console.log('res=>',res.data); 
                 if (res.data!== '未找到相关信息'){
@@ -80,16 +76,20 @@ const ProjectFrom = (props) => {
                 }
             }
           )
+    };
+    useEffect(() => {
+        // TODO: 新增接口
+        reflash();
     }, [])
 
     return (
-        <div >
+        <div className='outside'>
              <div className='topText12'>查看订单</div>
             <Table 
             columns={columns} 
-            dataSource={testdata} 
+            dataSource={data} 
             scroll={{
-                y:'1000px'
+                y:'350px'
             }} 
             pagination={{
                 howQuickJumper: true,

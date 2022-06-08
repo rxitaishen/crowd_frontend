@@ -1,9 +1,10 @@
 
 import './index.css';
 import { useState, useEffect,useRef  } from 'react'
-import { Layout, Progress, InputNumber, Modal, message } from 'antd';
+import { Layout, Progress, InputNumber, Modal, message, Input } from 'antd';
 import store from '../../redux/store'
 import HeaderMenu from '../../components/header';
+import moment from 'moment';
 import axios from 'axios'
 import { Link, withRouter, useLocation } from 'react-router-dom'
 const { Header, Content, Footer } = Layout;
@@ -12,6 +13,8 @@ const { Header, Content, Footer } = Layout;
 function Detail(props) {
   const info = props.location.query.data_ori
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isBuyModalVisible, setIsBuyModalVisible] = useState(false);
+  const [addressArr, setAddressArr] = useState([]);
   const { img, data } = info
   const { name, description, viewNum, suportNum, timeStart, timeEnd, moneyTarget, moneyHave, owner } = data
   // const {data} = location.action.query
@@ -21,34 +24,69 @@ function Detail(props) {
   // const [moneyProgress,setMoneyProgress] = useState(parseInt(moneyHave/moneyTarget)*100) //已有钱的进度
   const [moneyProgress,setMoneyProgress] = useState(parseInt((moneyHave/moneyTarget)*100)) 
   const model = useRef()
+  const model2 = useRef()
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  useEffect(() => {
+    axios.post('/api/projects/receive/owner',{owner: store.getState()}).then((res)=>{
+      setAddressArr(res.data);
+    });
+  }, []);
+
+  const showModal = (v) => {
+    if(v){
+      setIsModalVisible(true);
+    } else {
+      setIsBuyModalVisible(true);
+    }
   };
 
-  const handleOk = () => {
-    setIsModalVisible(false);
-    console.log(model.current.value);
-    if (store){
-      console.log('支持成功');
-      let sNum = parseInt(model.current.value);
-      let obj = {name:name, num:sNum, userName:store.getState()}
 
-      axios.post(`/api/projects/suport`,obj).then((res)=>{
-        let mHave =res.data
-        console.log('返回的参数为',mHave);
-        setMoney(mHave)
-        console.log('捐款了',parseInt((mHave/moneyTarget)*100))
-        setMoneyProgress(parseInt((mHave/moneyTarget)*100)) 
-        axios.get(`/api/projects/suport/${name}`).then((res)=>{
-          setSuport(res.data)
+  const handleOk = (v) => {
+    if(v){
+      setIsModalVisible(false);
+      console.log(model.current.value);
+      if (store){
+        console.log('支持成功');
+        let sNum = parseInt(model.current.value);
+        let obj = {name:name, num:sNum, userName:store.getState()}
+        
+  
+        axios.post(`/api/projects/suport`,obj).then((res)=>{
+          let mHave =res.data
+          console.log('返回的参数为',mHave);
+          setMoney(mHave)
+          console.log('捐款了',parseInt((mHave/moneyTarget)*100))
+          setMoneyProgress(parseInt((mHave/moneyTarget)*100)) 
+          axios.get(`/api/projects/suport/${name}`).then((res)=>{
+            setSuport(res.data)
+          })
         })
-      })}
-      
+      }
+    } else {
+      setIsBuyModalVisible(false);
+      console.log(model2.current,model2.current.input.value);
+      if (store){
+        console.log('支持成功');
+        let sNum = model2.current.input.value;
+        const time = moment().format("YYYY-MM-DD HH:mm:ss")
+        let obj = {address: sNum, proName:name, buyTime:time, userName:store.getState(), paperState: 2};
+        console.log(obj);
+  
+        axios.post(`/api/projects/buyRecord/add`,obj).then((res)=>{
+          let mHave =res.data
+          console.log('返回的参数为',mHave);
+          message.success('下单成功')
+        })}
+    }
+
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
+  const handleCancel = (v) => {
+    if(v){
+      setIsModalVisible(false);
+    } else {
+      setIsBuyModalVisible(false);
+    }
   };
 
   const handleSuport = () => {
@@ -58,7 +96,7 @@ function Detail(props) {
       props.history.push('/login')
     }
     else {
-      showModal()
+      showModal(1)
     }
   }
 
@@ -69,7 +107,7 @@ function Detail(props) {
       props.history.push('/login')
     }
     else {
-      message.success('下单成功')
+      showModal(0)
     }
   }
 
@@ -140,9 +178,14 @@ function Detail(props) {
               <div id='suport-rightnow-div'>
                 <a id='suport-rightnow' onClick={handleSuport}>立即支持</a>
                 <a id='suport-rightnow' onClick={handleBuy}>立即下单</a>
-                <Modal title="请输入支持金额" width={300} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                <Modal title="请输入支持金额" width={300} visible={isModalVisible} onOk={() => handleOk(1)} onCancel={() => handleCancel(1)}>
                   <div className='modalnum'> 
                   支持 <InputNumber ref={model}  onChange={onChange} /> 元
+                </div>
+                </Modal>
+                <Modal title="请输入您的收货地址" width={500} visible={isBuyModalVisible} onOk={() => handleOk(0)} onCancel={() => handleCancel(0)}>
+                  <div className='modalnum'> 
+                  收货地址 <Input ref={model2}  /> 
                 </div>
                 </Modal>
               </div>
