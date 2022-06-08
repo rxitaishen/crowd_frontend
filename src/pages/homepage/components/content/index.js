@@ -30,10 +30,14 @@ const Header = () => {
         </div>
         <div className={styles.right}>
             {/* <div className={styles.rigthtL}> */}
-                <div style={{ display:'inline-block',marginLeft:'50px', background: "red",height:'100%',width:'30%' }}></div>
+                <div style={{ display:'inline-block',marginLeft:'50px',borderRadius:'4px' , background: "red",height:'100%',width:'30%',overflow:'hidden' }}>
+                    <img src='./首页小图1.png'></img>
+                </div>
             {/* </div> */}
             {/* <div className={styles.rightR}> */}
-                <div style={{ display:'inline-block',marginLeft:'50px', background: "blue",height:'100%',width:'30%' }}></div>
+                <div style={{ display:'inline-block',marginLeft:'50px',borderRadius:'4px' , background: "blue",height:'100%',width:'30%' ,overflow:'hidden'}}>
+                <img src='./首页小图2.png'></img>
+                </div>
             {/* </div> */}
         </div>
     </div>
