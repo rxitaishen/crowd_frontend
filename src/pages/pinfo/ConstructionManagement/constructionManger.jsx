@@ -33,7 +33,7 @@ const ArticleManger = (props) => {
 
   const refrash = () => {
     axios
-    .post(`/api/projects/search/owner`, { owner: store.getState() })
+    .post(`/api/projects/receive/owner`, { owner: store.getState() })
     .then((res) => {
       console.log("res=>", res.data);
       if (res.data !== "未找到相关信息") {
@@ -54,25 +54,45 @@ const ArticleManger = (props) => {
   const handleSubmit = () => {
     form.validateFields().then(
       (fieldsValue) => {
-        //输出表单对象
+        // //输出表单对象
+        // console.log('表单对象', fieldsValue);
+        
+        // fieldsValue.timeStart = date1_hou || moment(fieldsValue.time[0]).format("YYYY-MM-DD")
+        // fieldsValue.timeEnd = date1_hou || moment(fieldsValue.time[1]).format("YYYY-MM-DD")
+        // fieldsValue.time = undefined;
+        // const param = {...fieldsValue, _id: editData._id };
+        // console.log('param: ', param._id);
+        // axios.post(`/api/receive/edit`, param).then(res => {
+        //   console.log('res=>', res.data);
+        //   if (res.data == "访问成功") {
+        //     setVisible(false);
+        //     date1_hou = '';
+        //     refrash();
+        //     message.success("访问成功")
+        //   }
+        //   else if (res.data == "访问失败") {
+        //     setVisible(false);
+        //     message.error("访问失败")
+        //   }
+        // })
+
+
+        // 输出表单对象
         console.log('表单对象', fieldsValue);
         
-        fieldsValue.timeStart = date1_hou || moment(fieldsValue.time[0]).format("YYYY-MM-DD")
-        fieldsValue.timeEnd = date1_hou || moment(fieldsValue.time[1]).format("YYYY-MM-DD")
-        fieldsValue.time = undefined;
-        const param = {...fieldsValue, _id: editData._id };
+        const param = {...fieldsValue};
         console.log('param: ', param._id);
-        axios.post(`/api/projects/edit`, param).then(res => {
+        axios.post(`/api/projects/receive/add`, param).then(res => {
           console.log('res=>', res.data);
-          if (res.data == "访问成功") {
+          if (res.data == "支持成功") {
             setVisible(false);
             date1_hou = '';
             refrash();
-            message.success("访问成功")
+            message.success("编辑成功")
           }
-          else if (res.data == "访问失败") {
+          else if (res.data == "支持失败") {
             setVisible(false);
-            message.error("访问失败")
+            message.error("编辑失败")
           }
         })
       }
@@ -87,8 +107,8 @@ const ArticleManger = (props) => {
   };
 
   //这边是编辑
-  const handleEditClick = (name) => {
-    axios.post(`/api/projects/search/name`, {proName: name}).then((res) => {
+  const handleEditClick = (r) => {
+    axios.post(`/api/receive/edit`, r).then((res) => {
         console.log('编辑项目',res.data);
         setEditData(res.data);
         setVisible(true)
@@ -141,9 +161,9 @@ const ArticleManger = (props) => {
       render: (text, record) => {
         return (
           <div>
-            <a onClick={() => handleEditClick(record.name)}>编辑</a>
+            {/* <a onClick={() => handleEditClick(record)}>编辑</a>
 
-            <Divider type="vertical" />
+            <Divider type="vertical" /> */}
 
             <Popconfirm
               title="确认是否删除"
@@ -163,6 +183,7 @@ const ArticleManger = (props) => {
   //模态框的点击事件，从子组件那边用react的一个hook传过来了
   const handleOk = () => {
     modalChild.current.submit();
+    setVisible(false);
   };
 
   //关闭按钮
@@ -207,7 +228,7 @@ const ArticleManger = (props) => {
           againQuery={againQuery}
           role={roleno}
         /> */}
-        <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFinish={handleSubmit} form={form}>
+        <Form labelCol={{ span: 8 }} ref={modalChild} wrapperCol={{ span: 16 }} onFinish={handleSubmit} form={form}>
           <Form.Item
             label="收货人姓名"
             name="name"
